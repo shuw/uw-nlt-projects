@@ -2,8 +2,8 @@ package edu.nlt.ling570.project1.test;
 
 import java.util.Collection;
 
-import edu.nlt.parser.LDC2004T03Parser;
 import edu.nlt.shallow.data.tags.Tag;
+import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.util.InputUtil;

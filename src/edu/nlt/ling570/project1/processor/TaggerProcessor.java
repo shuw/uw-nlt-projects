@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.nlt.algorithm.Tagger;
-import edu.nlt.parser.LDC2004T03Parser;
 import edu.nlt.shallow.data.tags.EOWTag;
 import edu.nlt.shallow.data.tags.Tag;
+import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.util.LineProcessor;
 
 /**

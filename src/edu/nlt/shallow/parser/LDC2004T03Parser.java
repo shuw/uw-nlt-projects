@@ -1,4 +1,4 @@
-package edu.nlt.parser;
+package edu.nlt.shallow.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +11,6 @@ import edu.nlt.shallow.data.tags.PeriodTag;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
 import edu.nlt.shallow.data.tags.UnknownTag;
-import edu.nlt.shallow.parser.ParserException;
-import edu.nlt.shallow.parser.TagParser;
 
 /**
  * Annotation parser for Morphologically Annotated Korean Text

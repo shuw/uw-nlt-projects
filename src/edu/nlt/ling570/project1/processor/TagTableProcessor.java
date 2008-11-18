@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.nlt.parser.LDC2004T03Parser;
 import edu.nlt.shallow.data.CountHolder;
 import edu.nlt.shallow.data.TagCounterTable;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.Tag.TagType;
+import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.util.Globals;

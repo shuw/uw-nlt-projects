@@ -12,7 +12,7 @@ public class Word implements Keyable {
 
 	@Override
 	public String getKey() {
-		return toString().toLowerCase();
+		return toString();
 	}
 
 	public String toString() {

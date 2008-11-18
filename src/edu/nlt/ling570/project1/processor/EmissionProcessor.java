@@ -3,13 +3,13 @@ package edu.nlt.ling570.project1.processor;
 import java.io.PrintStream;
 import java.util.Collection;
 
-import edu.nlt.parser.LDC2004T03Parser;
 import edu.nlt.shallow.data.Emission;
 import edu.nlt.shallow.data.EmissionTable;
 import edu.nlt.shallow.data.EmissionTableBuilder;
 import edu.nlt.shallow.data.Keyable;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
+import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.util.Globals;
