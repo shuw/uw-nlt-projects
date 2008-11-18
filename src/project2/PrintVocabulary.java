@@ -159,7 +159,7 @@ public class PrintVocabulary {
 			KeyCounterTable<Keyable> counterTable) {
 		Hashtable<String, Double> TfIdfTable = new Hashtable<String, Double>();
 
-		int count = 0;
+		// int count = 0;
 		for (CountHolder<Keyable> wordCounter : counterTable.getReverseSorted()) {
 
 			String word = wordCounter.getComponent().toString();
