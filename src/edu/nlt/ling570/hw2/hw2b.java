@@ -54,7 +54,7 @@ public class hw2b {
 	}
 
 	private static void printMarkoxTransitionTable(PrintStream out, List<Tag> tags,
-			TransitionTable transitionTable) {
+			TransitionTable<Bigram> transitionTable) {
 
 		// print first row
 		out.print("\t");

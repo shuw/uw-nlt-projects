@@ -14,7 +14,6 @@ import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.tools.CompareResult;
-import edu.nlt.tools.TagCompareResult;
 import edu.nlt.tools.TagComparer;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.LineProcessor;
@@ -88,11 +87,11 @@ public class Evaluate {
 
 	public static void printOutput(PrintStream out, CompareResult compareResult) {
 
-		LDC2004T03Formatter formatter = new LDC2004T03Formatter();
-
-		for (TagCompareResult tag : compareResult.getTagResults()) {
-//			System.out.print(formatter.print(tag));
-		}
+//		LDC2004T03Formatter formatter = new LDC2004T03Formatter();
+//
+//		for (TagCompareResult tag : compareResult.getTagResults()) {
+////			System.out.print(formatter.print(tag));
+//		}
 
 		System.out.println();
 		System.out.println("Total # of morphemes evaluated:\t" + compareResult.getMorphemeCount());

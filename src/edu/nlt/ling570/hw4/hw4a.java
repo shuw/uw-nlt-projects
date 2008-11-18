@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 
 import edu.nlt.languageModels.cavnarTrenkle.CTLanguageModel;
-import edu.nlt.languageModels.cavnarTrenkle.CTLanguageModelBuilder;
 import edu.nlt.ling570.hw3.CTProcessor;
 import edu.nlt.util.InputUtil;
 

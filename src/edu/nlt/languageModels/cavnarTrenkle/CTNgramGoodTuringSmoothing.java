@@ -48,8 +48,8 @@ public class CTNgramGoodTuringSmoothing extends CTNgramTable {
 		// map c -> c*
 		updatedFrequencies = new double[paramK + 1];
 
-		double ffKPlus1 = ncTable.get(paramK + 1);
-		double ff1 = ncTable.get(1);
+//		double ffKPlus1 = ncTable.get(paramK + 1);
+//		double ff1 = ncTable.get(1);
 
 		for (int frequency = 0; frequency <= paramK; frequency++) {
 

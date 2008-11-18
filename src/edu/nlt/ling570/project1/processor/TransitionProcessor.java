@@ -22,7 +22,7 @@ public class TransitionProcessor implements LineProcessor {
 	private TransitionTableBuilder transitionTableBuilder = new TransitionTableBuilder(
 			new PeriodTag());
 
-	public TransitionTable getTransitionTable() {
+	public TransitionTable<Bigram> getTransitionTable() {
 		return transitionTableBuilder.getBigramTable();
 	}
 
