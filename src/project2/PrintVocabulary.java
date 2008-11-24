@@ -19,15 +19,7 @@ public class PrintVocabulary {
 
 		// Parse gold standard
 		//
-		GoldStandard goldStandard;
-		{
-			GoldStandardProcessor processor = new GoldStandardProcessor();
-
-			// Parse GoldStandardFile
-			//
-			InputUtil.process(new File(args[1]), processor);
-			goldStandard = processor.getGoldStandard();
-		}
+		GoldStandard goldStandard = Util.getGoldStandard(new File(args[1]));
 
 		// Print vocabulary
 		//

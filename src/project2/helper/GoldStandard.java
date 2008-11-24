@@ -11,6 +11,10 @@ public class GoldStandard {
 	}
 
 	public boolean isLinguistic(String fileName) {
+		if (!isCategorized(fileName)) {
+			throw new IllegalArgumentException("uncategorized file: " + fileName);
+		}
+
 		Boolean result = data.get(fileName.toLowerCase());
 
 		return result != null ? result : false;

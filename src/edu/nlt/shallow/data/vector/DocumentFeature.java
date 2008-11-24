@@ -18,7 +18,7 @@ public class DocumentFeature {
 		return word;
 	}
 
-	public double getStrength() {
+	public double getMagnitude() {
 		return strength;
 	}
 

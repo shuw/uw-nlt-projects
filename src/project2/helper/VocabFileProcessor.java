@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Hashtable;
 
 import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.WordMagnitude;
 import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.table.KeyCounterTable;
@@ -65,7 +66,7 @@ public class VocabFileProcessor implements FileProcessor {
 			nonlingTfIdfTable = getGlobalTfIdf(idfTable, nonLingCounter);
 		}
 
-		ArrayList<WordDoublePair> list = new ArrayList<WordDoublePair>(lingTfIdfTable.size());
+		ArrayList<WordMagnitude> list = new ArrayList<WordMagnitude>(lingTfIdfTable.size());
 		{
 			for (String word : lingTfIdfTable.keySet()) {
 
@@ -74,7 +75,7 @@ public class VocabFileProcessor implements FileProcessor {
 				Double nonLingTfIdf = nonlingTfIdfTable.get(word);
 				if (nonLingTfIdf != null) {
 
-					WordDoublePair x = new WordDoublePair(new Word(word), Math.abs(lingTfIdf
+					WordMagnitude x = new WordMagnitude(new Word(word), Math.abs(lingTfIdf
 							- nonLingTfIdf));
 					list.add(x);
 
@@ -83,17 +84,17 @@ public class VocabFileProcessor implements FileProcessor {
 			}
 		}
 
-		Collections.sort(list, new Comparator<WordDoublePair>() {
+		Collections.sort(list, new Comparator<WordMagnitude>() {
 
 			@Override
-			public int compare(WordDoublePair o1, WordDoublePair o2) {
-				return Double.compare(o2.getValue(), o1.getValue());
+			public int compare(WordMagnitude o1, WordMagnitude o2) {
+				return Double.compare(o2.getMagnitude(), o1.getMagnitude());
 			}
 
 		});
 
 		int count = 0;
-		for (WordDoublePair wordValue : list) {
+		for (WordMagnitude wordValue : list) {
 
 			Word word = wordValue.getWord();
 			System.out.println();
@@ -141,26 +142,6 @@ public class VocabFileProcessor implements FileProcessor {
 		}
 
 		return TfIdfTable;
-	}
-
-	private static class WordDoublePair {
-
-		Word word;
-		double value;
-
-		public WordDoublePair(Word word, double value) {
-			super();
-			this.word = word;
-			this.value = value;
-		}
-
-		public double getValue() {
-			return value;
-		}
-
-		public Word getWord() {
-			return word;
-		}
 	}
 
 }
