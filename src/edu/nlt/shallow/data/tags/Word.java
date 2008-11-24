@@ -7,7 +7,7 @@ public class Word implements Keyable {
 
 	public Word(String word) {
 		super();
-		this.word = word;
+		this.word = word.toLowerCase();
 	}
 
 	@Override

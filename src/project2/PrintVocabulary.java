@@ -19,6 +19,7 @@ import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.FileUtil;
 import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
+import edu.nlt.util.Singletons;
 
 public class PrintVocabulary {
 	/**
@@ -62,8 +63,8 @@ public class PrintVocabulary {
 					System.out.println("processing file: " + file.getName());
 
 					// Only process 100 files to speed up development
-					if (count > 100)
-						break;
+					// if (count > 100)
+					// break;
 
 				}
 
@@ -132,10 +133,23 @@ public class PrintVocabulary {
 			System.out.println();
 			System.out.print(word);
 
-			System.out.print("\t\t" + lingCounter.getCount(new Word(word)));
-			System.out.print("\t\t" + nonLingCounter.getCount(new Word(word)));
+			double IDF = idfTable.getIDF(word);
+			{
+				int lingWordCount = lingCounter.getCount(new Word(word));
 
-			if (++count > 500) {
+				System.out.print("\t\t" + lingWordCount);
+				System.out.print("/"
+						+ Singletons.FractionFormatter.format((double) lingWordCount * IDF));
+			}
+
+			{
+				int nonLingWordCount = nonLingCounter.getCount(new Word(word));
+				System.out.print("\t\t" + nonLingWordCount);
+				System.out.print("/"
+						+ Singletons.FractionFormatter.format((double) nonLingWordCount * IDF));
+			}
+
+			if (++count > 2000) {
 				break;
 			}
 		}
