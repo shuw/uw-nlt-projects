@@ -1,8 +1,11 @@
 package project2;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 
+import project2.data.LinguisticCluster;
+import project2.processor.ClustersProcessor;
 import project2.processor.DocumentVectorProcessor;
 import project2.processor.FileIDFBuilder;
 import project2.processor.GoldStandard;
@@ -23,6 +26,22 @@ public class Util {
 
 		return processor.getDocumentVector();
 
+	}
+
+	public static DocumentVector getDocumentVector(IDFTable idfTable, HashSet<String> vocabulary,
+			File file) {
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(idfTable, vocabulary);
+		InputUtil.process(System.in, new PlainWordProcessor(processor));
+		return processor.getDocumentVector();
+
+	}
+
+	public static Collection<LinguisticCluster> getClusters(File file, HashSet<String> vocabulary) {
+
+		ClustersProcessor processor = new ClustersProcessor(vocabulary);
+		InputUtil.process(file, processor);
+
+		return processor.getVectors();
 	}
 
 	public static HashSet<String> getVocabulary(File file) {

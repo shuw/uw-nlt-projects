@@ -52,7 +52,6 @@ public class PrintClusters {
 	}
 }
 
-
 class KMeansRunner {
 	private int minWrongClassifications;
 	private KMeansAlgorithm bestAlgorithm;
@@ -96,9 +95,8 @@ class KMeansRunner {
 			wrongClassifications += Math.min(linguisticCount, cluster.getVectors().size()
 					- linguisticCount);
 
-			double percentLinguistic = (double) linguisticCount
-					/ (double) cluster.getVectors().size();
-
+			// double percentLinguistic = (double) linguisticCount
+			// / (double) cluster.getVectors().size();
 			// System.out.print(Singletons.PercentageFormatter.format(percentLinguistic)
 			// + " ");
 
