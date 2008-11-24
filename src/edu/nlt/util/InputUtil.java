@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 
+import edu.nlt.util.processor.LineProcessor;
+
 public class InputUtil {
 
 	public static void processFiles(String path, FileProcessor processor) {

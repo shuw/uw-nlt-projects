@@ -1,6 +1,6 @@
 package edu.nlt.ling570.hw3;
 
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 public class SGMTextProcessor implements LineProcessor {
 	private static final String c_startTextTag = "<text";

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import edu.nlt.languageModels.cavnarTrenkle.CTLanguageModel;
 import edu.nlt.languageModels.cavnarTrenkle.CTLanguageModelBuilder;
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 /**
  * Processes language model output by Cavnar and Trenkle

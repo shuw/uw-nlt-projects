@@ -1,13 +1,15 @@
 package project2;
 
 import java.io.File;
-import java.util.Hashtable;
+import java.util.HashSet;
 
-import edu.nlt.shallow.data.WordIDF;
+import project2.helper.DocumentVectorProcessor;
+import project2.helper.FileIDFBuilder;
+import project2.helper.PlainWordProcessor;
 import edu.nlt.shallow.data.table.IDFTable;
-import edu.nlt.shallow.data.tags.Word;
+import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 public class PrintVector {
 
@@ -18,17 +20,48 @@ public class PrintVector {
 	 * 
 	 *            args[0] IDFTable
 	 * 
-	 *            args[1] Path to file
+	 *            args[1] Vocabulary
+	 * 
+	 *            args[2] Path to file
 	 * 
 	 * 
 	 */
 	public static void main(String[] args) {
 
 		IDFTable idfTable = readIDFTable(new File(args[0]));
-		
-		
-		
 
+		HashSet<String> vocabulary = readVocabulary(new File(args[1]));
+
+		DocumentVector documentVector = createDocumentVector(new File(args[2]), idfTable,
+				vocabulary);
+
+		documentVector.print();
+	}
+
+	private static DocumentVector createDocumentVector(File file, IDFTable idfTable,
+			HashSet<String> vocab) {
+
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(idfTable, vocab);
+
+		InputUtil.process(file, new PlainWordProcessor(processor));
+
+		return processor.getDocumentVector();
+
+	}
+
+	private static HashSet<String> readVocabulary(File file) {
+		final HashSet<String> vocabulary = new HashSet<String>();
+
+		InputUtil.process(file, new LineProcessor() {
+
+			@Override
+			public void processLine(String value) {
+				vocabulary.add(value.split("\t")[0]);
+
+			}
+		});
+
+		return vocabulary;
 	}
 
 	private static IDFTable readIDFTable(File file) {
@@ -36,33 +69,5 @@ public class PrintVector {
 		InputUtil.process(file, builder);
 		return builder.build();
 
-	}
-}
-
-class FileIDFBuilder implements LineProcessor {
-	private Hashtable<String, WordIDF> table = new Hashtable<String, WordIDF>();
-	private double smoothingNullValue = Double.NaN;
-
-	@Override
-	public void processLine(String value) {
-
-		if (smoothingNullValue == Double.NaN) {
-			smoothingNullValue = Double.parseDouble(value);
-		} else {
-			String[] components = value.split("\t");
-			if (components.length == 2) {
-				Word word = new Word(components[0]);
-
-				double idfValue = Double.parseDouble(components[1]);
-
-				table.put(word.getKey(), new WordIDF(word, idfValue));
-			} else if (!"".equals(value)) {
-				(new Exception("Bad input:  " + value)).printStackTrace(System.err);
-			}
-		}
-	}
-
-	public IDFTable build() {
-		return new IDFTable(table, smoothingNullValue);
 	}
 }

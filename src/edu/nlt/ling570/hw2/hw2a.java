@@ -6,8 +6,8 @@ import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.LineProcessor;
 import edu.nlt.util.PTBParser;
+import edu.nlt.util.processor.LineProcessor;
 
 public class hw2a {
 

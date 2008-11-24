@@ -14,8 +14,8 @@ import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.util.Globals;
-import edu.nlt.util.LineProcessor;
 import edu.nlt.util.Singletons;
+import edu.nlt.util.processor.LineProcessor;
 
 public class TransitionProcessor implements LineProcessor {
 	final TagParser parser = new LDC2004T03Parser();

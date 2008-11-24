@@ -1,4 +1,4 @@
-package edu.nlt.util;
+package edu.nlt.util.processor;
 
 
 public interface LineProcessor {

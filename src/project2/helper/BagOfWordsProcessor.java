@@ -3,9 +3,7 @@ package project2.helper;
 import java.util.HashSet;
 
 import edu.nlt.shallow.data.tags.Word;
-import edu.nlt.shallow.parser.ParserException;
-import edu.nlt.shallow.parser.PlainWordParser;
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.WordProcessor;
 
 /**
  * Creates bag of word
@@ -13,21 +11,15 @@ import edu.nlt.util.LineProcessor;
  * @author shu
  * 
  */
-public class BagOfWordsProcessor implements LineProcessor {
+public class BagOfWordsProcessor implements WordProcessor {
 
 	private HashSet<String> data = new HashSet<String>();
-	private PlainWordParser wordParser = new PlainWordParser();
 
 	@Override
-	public void processLine(String value) {
+	public void processWord(Word word) {
 
-		try {
-			for (Word word : wordParser.getWords(value)) {
-				data.add(word.toString());
-			}
-		} catch (ParserException e) {
-			e.printStackTrace(System.err);
-		}
+		data.add(word.toString());
+
 	}
 
 	public HashSet<String> getWords() {

@@ -9,7 +9,7 @@ import edu.nlt.algorithm.Tagger;
 import edu.nlt.shallow.data.tags.EOWTag;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.parser.LDC2004T03Parser;
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 /**
  * Viterbi Algorithm

@@ -16,7 +16,7 @@ import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 public class ViterbiHelper {
 	public static Collection<Tag> getTags(File trainingFile, File inputFile) {

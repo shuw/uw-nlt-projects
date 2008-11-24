@@ -16,8 +16,8 @@ import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.tools.CompareResult;
 import edu.nlt.tools.TagComparer;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.LineProcessor;
 import edu.nlt.util.Singletons;
+import edu.nlt.util.processor.LineProcessor;
 
 public class Evaluate {
 

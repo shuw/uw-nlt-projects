@@ -34,14 +34,14 @@ public class VocabFileProcessor implements FileProcessor {
 
 		if (goldStandard.isCategorized(canonicalName)) {
 			BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
-			InputUtil.process(file, bagOfWordsProcessor);
+			InputUtil.process(file, new PlainWordProcessor(bagOfWordsProcessor));
 			idfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
 
 			if (goldStandard.isLinguistic(canonicalName)) {
 
-				InputUtil.process(file, lingProcessor);
+				InputUtil.process(file, new PlainWordProcessor(lingProcessor));
 			} else {
-				InputUtil.process(file, nonLingProcessor);
+				InputUtil.process(file, new PlainWordProcessor(nonLingProcessor));
 			}
 
 		} else {

@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import project2.helper.BagOfWordsProcessor;
+import project2.helper.PlainWordProcessor;
 import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;
@@ -38,7 +39,7 @@ class IDFProcessor implements FileProcessor {
 	@Override
 	public void processFile(File file) {
 		BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
-		InputUtil.process(file, bagOfWordsProcessor);
+		InputUtil.process(file, new PlainWordProcessor(bagOfWordsProcessor));
 		idfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
 
 	}

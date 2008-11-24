@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.nlt.util.LineProcessor;
+import edu.nlt.util.processor.LineProcessor;
 
 public class GoldStandardProcessor implements LineProcessor {
 	private final Pattern pattern = Pattern.compile("([0-9]+)[\\s]+(.*)[\\s]*");

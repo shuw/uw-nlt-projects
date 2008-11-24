@@ -15,10 +15,10 @@ import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.LineProcessor;
 import edu.nlt.util.MathUtil;
 import edu.nlt.util.PTBParser;
 import edu.nlt.util.Singletons;
+import edu.nlt.util.processor.LineProcessor;
 
 public class hw2b {
 	private static void printEmissionMatrix(PrintStream out, List<Keyable> words,
