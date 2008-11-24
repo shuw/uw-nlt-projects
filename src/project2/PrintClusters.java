@@ -1,22 +1,15 @@
 package project2;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 
-import project2.helper.GoldStandard;
+import project2.processor.GoldStandard;
+import project2.processor.VectorProcessor;
 import edu.nlt.algorithm.KMeansAlgorithm;
 import edu.nlt.algorithm.KMeansAlgorithm.Cluster;
-import edu.nlt.shallow.data.tags.Word;
-import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.Singletons;
-import edu.nlt.util.processor.LineProcessor;
 
 public class PrintClusters {
 
@@ -45,59 +38,23 @@ public class PrintClusters {
 
 		KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-		for (int clusters = 2; clusters < 30; clusters++) {
-			System.out.println("Cluster size: " + clusters);
-			runner.run(clusters, 30);
+		// for (int clusters = 2; clusters < 30; clusters++) {
+		// System.out.println("Cluster size: " + clusters);
+		// runner.run(clusters, 30);
+		//
+		// runner.printResults();
+		// }
 
-			runner.printResults();
-		}
+		runner.run(3, 100);
+
+		runner.printResults();
 
 	}
 }
 
-class VectorProcessor implements LineProcessor {
-
-	private LinkedList<DocumentVector> vectors = new LinkedList<DocumentVector>();
-	private Hashtable<String, DocumentFeature> currentVectorTable;
-	private String currentVectorName;
-
-	@Override
-	public void processLine(String value) {
-		if (value.startsWith("file:")) {
-			pushVectorTable();
-
-			currentVectorName = value.split("\t")[1];
-			currentVectorTable = new Hashtable<String, DocumentFeature>();
-
-		} else if (!"".equals(value)) {
-
-			String[] components = value.split("\t");
-
-			Word word = new Word(components[0]);
-			double strength = Double.parseDouble(components[1]);
-
-			currentVectorTable.put(word.getKey(), new DocumentFeature(word, strength));
-
-		}
-
-	}
-
-	private void pushVectorTable() {
-		if (currentVectorTable != null) {
-			vectors.add(new DocumentVector(currentVectorTable, currentVectorName));
-			currentVectorTable = null;
-		}
-	}
-
-	public List<DocumentVector> getVectors() {
-		pushVectorTable();
-		return new ArrayList<DocumentVector>(vectors);
-	}
-
-}
 
 class KMeansRunner {
-	private int minWrongClassifications = Integer.MAX_VALUE;
+	private int minWrongClassifications;
 	private KMeansAlgorithm bestAlgorithm;
 	private GoldStandard goldStandard;
 	private Collection<DocumentVector> vectors;
@@ -112,8 +69,11 @@ class KMeansRunner {
 	}
 
 	public void run(int clusters, int iterations) {
+		minWrongClassifications = Integer.MAX_VALUE;
+		bestAlgorithm = null;
 
 		for (int iteration = 0; iteration < iterations; iteration++) {
+
 			// Repeat algorithm several times with different seeds
 			runIteration(goldStandard, new KMeansAlgorithm(vectors, vocabulary, clusters));
 		}
@@ -160,7 +120,7 @@ class KMeansRunner {
 		int linguisticCount = 0;
 		for (KMeansAlgorithm.NamedVector vector : vectors) {
 
-			if (tags.isLinguistic(vector.getName().split("\\.")[0])) {
+			if (tags.isLinguistic(vector.getName())) {
 				linguisticCount++;
 			}
 		}
@@ -181,19 +141,18 @@ class KMeansRunner {
 	public void printResults() {
 		System.out.println("Wrong classifications: " + minWrongClassifications);
 
-		// Cluster[] clusters = bestAlgorithm.getClusters();
-		// for (int i = 0; i < clusters.length; i++) {
-		// KMeansAlgorithm.Cluster cluster = clusters[i];
-		//
-		// boolean isLinguistic = isClusterLinguistic(goldStandard,
-		// cluster.getVectors());
-		//
-		// System.out.println(isLinguistic ? "L\tLinguistic cluster"
-		// : "NL\tNon-linguistic cluster");
-		//
-		// bestAlgorithm.printCentroid(i);
-		//
-		// }
+		Cluster[] clusters = bestAlgorithm.getClusters();
+		for (int i = 0; i < clusters.length; i++) {
+			KMeansAlgorithm.Cluster cluster = clusters[i];
+
+			boolean isLinguistic = isClusterLinguistic(goldStandard, cluster.getVectors());
+
+			System.out.println("Cluster: "
+					+ (isLinguistic ? "L\tLinguistic cluster" : "NL\tNon-linguistic cluster"));
+
+			bestAlgorithm.printCentroid(i);
+
+		}
 
 	}
 }

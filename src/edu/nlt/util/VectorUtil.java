@@ -1,6 +1,10 @@
 package edu.nlt.util;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Hashtable;
+
+import edu.nlt.shallow.data.vector.DocumentFeature;
 
 public class VectorUtil {
 
@@ -13,6 +17,43 @@ public class VectorUtil {
 			vector[dimension] /= length;
 
 		}
+	}
+
+	public static double[] getNormalizedVector(Collection<DocumentFeature> features,
+			HashSet<String> vocabulary) {
+
+		int vectorSize = vocabulary.size();
+
+		// Map each word to an array index
+		Hashtable<String, Integer> wordToIndex = new Hashtable<String, Integer>(vectorSize);
+
+		{
+			int index = 0;
+			for (String wordStr : vocabulary) {
+				wordToIndex.put(wordStr, index);
+
+				index++;
+			}
+		}
+
+		double[] vector = new double[vectorSize];
+
+		for (DocumentFeature feature : features) {
+
+			Integer index = wordToIndex.get(feature.getWord().getKey());
+
+			if (index != null) {
+
+				vector[index] = feature.getMagnitude();
+
+			} else {
+				(new Exception("Could not find vector in vocabulary")).printStackTrace(System.err);
+			}
+		}
+
+		VectorUtil.normalize(vector);
+		return vector;
+
 	}
 
 	public static double[] getCentroid(Collection<double[]> vectors) {

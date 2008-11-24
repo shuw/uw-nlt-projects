@@ -1,4 +1,4 @@
-package project2.helper;
+package project2.processor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,14 +31,14 @@ public class VocabFileProcessor implements FileProcessor {
 	@Override
 	public void processFile(File file) {
 		// remove file suffix
-		String canonicalName = file.getName().replaceFirst(".txt*", "");
+		String fileName = file.getName();
 
-		if (goldStandard.isCategorized(canonicalName)) {
+		if (goldStandard.isCategorized(fileName)) {
 			BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
 			InputUtil.process(file, new PlainWordProcessor(bagOfWordsProcessor));
 			idfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
 
-			if (goldStandard.isLinguistic(canonicalName)) {
+			if (goldStandard.isLinguistic(fileName)) {
 
 				InputUtil.process(file, new PlainWordProcessor(lingProcessor));
 			} else {
@@ -46,7 +46,7 @@ public class VocabFileProcessor implements FileProcessor {
 			}
 
 		} else {
-			System.err.println("Uncategorized file: " + canonicalName);
+			System.err.println("Uncategorized file: " + fileName);
 		}
 
 	}

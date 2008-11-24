@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import project2.helper.BagOfWordsProcessor;
-import project2.helper.PlainWordProcessor;
+import project2.processor.BagOfWordsProcessor;
+import project2.processor.PlainWordProcessor;
 import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;

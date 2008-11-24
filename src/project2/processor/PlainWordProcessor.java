@@ -1,4 +1,4 @@
-package project2.helper;
+package project2.processor;
 
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.parser.ParserException;

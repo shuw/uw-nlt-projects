@@ -3,11 +3,11 @@ package project2;
 import java.io.File;
 import java.util.HashSet;
 
-import project2.helper.DocumentVectorProcessor;
-import project2.helper.FileIDFBuilder;
-import project2.helper.GoldStandard;
-import project2.helper.GoldStandardProcessor;
-import project2.helper.PlainWordProcessor;
+import project2.processor.DocumentVectorProcessor;
+import project2.processor.FileIDFBuilder;
+import project2.processor.GoldStandard;
+import project2.processor.GoldStandardProcessor;
+import project2.processor.PlainWordProcessor;
 import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;

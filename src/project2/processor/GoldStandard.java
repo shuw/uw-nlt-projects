@@ -1,4 +1,4 @@
-package project2.helper;
+package project2.processor;
 
 import java.util.Hashtable;
 
@@ -11,16 +11,30 @@ public class GoldStandard {
 	}
 
 	public boolean isLinguistic(String fileName) {
-		if (!isCategorized(fileName)) {
+		String name = canonizeName(fileName);
+		if (!isCategorized(name)) {
 			throw new IllegalArgumentException("uncategorized file: " + fileName);
 		}
 
-		Boolean result = data.get(fileName.toLowerCase());
+		Boolean result = data.get(name);
 
 		return result != null ? result : false;
 	}
 
+	private static String canonizeName(String fileName) {
+		String name;
+		if (fileName.contains(".")) {
+			name = fileName.split("\\.")[0];
+		} else {
+			name = fileName;
+		}
+
+		return name.toLowerCase();
+	}
+
 	public boolean isCategorized(String fileName) {
-		return data.containsKey(fileName.toLowerCase());
+		String name = canonizeName(fileName);
+
+		return data.containsKey(name);
 	}
 }

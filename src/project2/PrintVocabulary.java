@@ -2,9 +2,8 @@ package project2;
 
 import java.io.File;
 
-import project2.helper.GoldStandard;
-import project2.helper.GoldStandardProcessor;
-import project2.helper.VocabFileProcessor;
+import project2.processor.GoldStandard;
+import project2.processor.VocabFileProcessor;
 import edu.nlt.util.InputUtil;
 
 public class PrintVocabulary {

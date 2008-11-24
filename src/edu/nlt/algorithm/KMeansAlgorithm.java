@@ -112,6 +112,7 @@ public class KMeansAlgorithm {
 	 */
 	private void initVectors(Collection<DocumentVector> docVectors, HashSet<String> vocabulary) {
 
+
 		// Map each word to an array index
 		indexToWord = new String[vocabulary.size()];
 		Hashtable<String, Integer> wordToIndex = new Hashtable<String, Integer>(vectorSize);
@@ -123,7 +124,6 @@ public class KMeansAlgorithm {
 				index++;
 			}
 		}
-
 		vectorsNormalized = new NamedVector[docVectors.size()];
 
 		int count = 0;
@@ -176,9 +176,9 @@ public class KMeansAlgorithm {
 		for (WordMagnitude wordMagnitude : words) {
 			System.out.println(wordMagnitude.getWord() + "\t" + wordMagnitude.getMagnitude());
 
-			if (count++ >= 10) {
-				break;
-			}
+			// if (count++ >= 10) {
+			// break;
+			// }
 		}
 
 		System.out.println("\n\n");

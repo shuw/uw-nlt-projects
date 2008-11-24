@@ -29,7 +29,6 @@ public class DocumentVector {
 
 	public Collection<DocumentFeature> values() {
 		return table.values();
-
 	}
 
 	public void print() {
