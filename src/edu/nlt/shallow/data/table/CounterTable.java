@@ -1,4 +1,4 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.table;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -8,8 +8,14 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
+import edu.nlt.shallow.data.CountHolder;
+
 public abstract class CounterTable<T> {
 	private Hashtable<String, CountHolder<T>> table = new Hashtable<String, CountHolder<T>>();
+
+	protected Hashtable<String, CountHolder<T>> getTable() {
+		return table;
+	}
 
 	private long totalCount = 0;
 

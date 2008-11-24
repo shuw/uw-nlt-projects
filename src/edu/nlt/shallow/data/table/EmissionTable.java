@@ -1,7 +1,9 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.table;
 
 import java.util.Hashtable;
 
+import edu.nlt.shallow.data.Emission;
+import edu.nlt.shallow.data.Keyable;
 import edu.nlt.shallow.data.tags.Tag;
 
 public class EmissionTable {

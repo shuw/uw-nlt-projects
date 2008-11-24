@@ -4,8 +4,8 @@ import java.io.PrintStream;
 import java.util.Collection;
 
 import edu.nlt.shallow.data.Transition;
-import edu.nlt.shallow.data.TransitionTable;
-import edu.nlt.shallow.data.TransitionTableBuilder;
+import edu.nlt.shallow.data.builder.TransitionTableBuilder;
+import edu.nlt.shallow.data.table.TransitionTable;
 import edu.nlt.shallow.data.tags.Bigram;
 import edu.nlt.shallow.data.tags.PeriodTag;
 import edu.nlt.shallow.data.tags.Tag;

@@ -1,7 +1,8 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.table;
 
 import java.util.Hashtable;
 
+import edu.nlt.shallow.data.Transition;
 import edu.nlt.shallow.data.tags.LinkedTag;
 
 public class TransitionTable<T extends LinkedTag> {

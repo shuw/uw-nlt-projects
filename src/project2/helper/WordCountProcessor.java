@@ -1,14 +1,13 @@
 package project2.helper;
 
-import edu.nlt.shallow.data.KeyCounterTable;
-import edu.nlt.shallow.data.Keyable;
+import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.PlainWordParser;
 import edu.nlt.util.LineProcessor;
 
 public class WordCountProcessor implements LineProcessor {
-	private KeyCounterTable<Keyable> counter = new KeyCounterTable<Keyable>();
+	private KeyCounterTable<Word> counter = new KeyCounterTable<Word>();
 
 	private PlainWordParser wordParser = new PlainWordParser();
 
@@ -24,7 +23,7 @@ public class WordCountProcessor implements LineProcessor {
 		}
 	}
 
-	public KeyCounterTable<Keyable> getCounter() {
+	public KeyCounterTable<Word> getCounter() {
 		return counter;
 	}
 

@@ -4,12 +4,12 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.List;
 
-import edu.nlt.shallow.data.EmissionTable;
-import edu.nlt.shallow.data.EmissionTableBuilder;
-import edu.nlt.shallow.data.KeyCounterTable;
 import edu.nlt.shallow.data.Keyable;
-import edu.nlt.shallow.data.TransitionTable;
-import edu.nlt.shallow.data.TransitionTableBuilder;
+import edu.nlt.shallow.data.builder.EmissionTableBuilder;
+import edu.nlt.shallow.data.builder.TransitionTableBuilder;
+import edu.nlt.shallow.data.table.EmissionTable;
+import edu.nlt.shallow.data.table.KeyCounterTable;
+import edu.nlt.shallow.data.table.TransitionTable;
 import edu.nlt.shallow.data.tags.Bigram;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.TaggedKeyable;

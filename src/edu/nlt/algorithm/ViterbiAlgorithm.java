@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.nlt.shallow.data.Emission;
-import edu.nlt.shallow.data.EmissionTable;
 import edu.nlt.shallow.data.Keyable;
-import edu.nlt.shallow.data.TransitionTable;
+import edu.nlt.shallow.data.table.EmissionTable;
+import edu.nlt.shallow.data.table.TransitionTable;
 import edu.nlt.shallow.data.tags.Bigram;
 import edu.nlt.shallow.data.tags.Morpheme;
 import edu.nlt.shallow.data.tags.PeriodTag;

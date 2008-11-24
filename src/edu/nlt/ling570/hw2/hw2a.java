@@ -2,7 +2,7 @@ package edu.nlt.ling570.hw2;
 
 import java.util.Collection;
 
-import edu.nlt.shallow.data.KeyCounterTable;
+import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.InputUtil;

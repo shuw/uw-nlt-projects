@@ -1,4 +1,4 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +7,12 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
+import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.Emission;
+import edu.nlt.shallow.data.Keyable;
+import edu.nlt.shallow.data.table.EmissionTable;
+import edu.nlt.shallow.data.table.KeyCounterTable;
+import edu.nlt.shallow.data.table.WordTable;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.TaggedKeyable;
 

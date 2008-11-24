@@ -1,4 +1,4 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.table;
 
 import edu.nlt.shallow.data.tags.Tag;
 

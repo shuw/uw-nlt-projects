@@ -1,6 +1,9 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.table;
 
 import java.util.Collection;
+
+import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.Keyable;
 
 public class WordTable<T extends Keyable> {
 

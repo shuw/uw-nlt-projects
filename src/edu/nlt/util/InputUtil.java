@@ -7,55 +7,34 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collection;
 
 public class InputUtil {
 
-	public static void processFiles(String path, LineProcessor processor) {
-		File folder = new File(path);
+	public static void processFiles(String path, FileProcessor processor) {
 
-		File[] files = folder.listFiles();
-
-		// Process files alphabetically
-		Arrays.sort(files, new Comparator<File>() {
-
-			@Override
-			public int compare(File o1, File o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
+		Collection<File> files = FileUtil.getFiles(path, true);
 
 		for (File file : files) {
 
-			BufferedReader reader = null;
-			try {
-				reader = new BufferedReader(new FileReader(file));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+			if (Globals.IsDebugEnabled) {
+				System.out.println("processing: " + file.getName());
 			}
 
-			if (reader != null) {
-
-				String line;
-				try {
-					do {
-
-						line = reader.readLine();
-
-						if (line != null) {
-							processor.processLine(line);
-						}
-
-					} while (line != null);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			}
-
+			processor.processFile(file);
 		}
+	}
+
+	public static void processFiles(String path, final LineProcessor processor) {
+
+		processFiles(path, new FileProcessor() {
+
+			@Override
+			public void processFile(File file) {
+				process(file, processor);
+
+			}
+		});
 
 	}
 

@@ -1,9 +1,15 @@
-package edu.nlt.shallow.data;
+package edu.nlt.shallow.data.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.Transition;
+import edu.nlt.shallow.data.table.CounterTable;
+import edu.nlt.shallow.data.table.KeyCounterTable;
+import edu.nlt.shallow.data.table.TagCounterTable;
+import edu.nlt.shallow.data.table.TransitionTable;
 import edu.nlt.shallow.data.tags.Bigram;
 import edu.nlt.shallow.data.tags.Tag;
 import edu.nlt.shallow.data.tags.Trigram;
