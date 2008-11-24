@@ -15,7 +15,14 @@ public class InputUtil {
 
 		Collection<File> files = FileUtil.getFiles(path, true);
 
+		int fileProcessedCount = 0;
 		for (File file : files) {
+
+			if (Globals.IsDebugEnabled) {
+				// Only process 100 files to speed up development
+//				if (fileProcessedCount++ > 100)
+//					break;
+			}
 
 			if (Globals.IsDebugEnabled) {
 				System.out.println("processing: " + file.getName());

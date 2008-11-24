@@ -1,47 +1,72 @@
 package project2;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import project2.helper.BagOfWordsProcessor;
-import edu.nlt.shallow.data.IDFResult;
+import edu.nlt.shallow.data.WordIDF;
+import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;
-import edu.nlt.util.FileUtil;
+import edu.nlt.util.FileProcessor;
 import edu.nlt.util.InputUtil;
 
 public class PrintIDFTable {
 
 	/**
+	 * Print sorted IDF Table
+	 * 
 	 * @param args
 	 * 
 	 *            args[0] Location of files
 	 */
 	public static void main(String[] args) {
 
-		IDFTable idfTable = getIDFTable(FileUtil.getFiles(args[0], true));
+		IDFProcessor processor = new IDFProcessor();
+		InputUtil.processFiles(args[0], processor);
 
-		printIDFTable(idfTable);
+		processor.printResults(-1);
 	}
 
-	private static void printIDFTable(IDFTable table) {
+}
 
-		
-		
-		for (IDFResult word : table.getIDFResults()) {
+class IDFProcessor implements FileProcessor {
+	private IDFTableBuilder idfTableBuilder = new IDFTableBuilder();
 
-		}
+	@Override
+	public void processFile(File file) {
+		BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
+		InputUtil.process(file, bagOfWordsProcessor);
+		idfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
+
 	}
 
-	private static IDFTable getIDFTable(Collection<File> files) {
+	public void printResults(int maxNumOfResults) {
 
-		IDFTable idfTable = new IDFTable();
+		IDFTable idfTable = idfTableBuilder.build();
 
-		for (File file : files) {
-			BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
-			InputUtil.process(file, bagOfWordsProcessor);
-			idfTable.addDocument(bagOfWordsProcessor.getWords());
+		List<WordIDF> list = new ArrayList<WordIDF>(idfTable.values());
+		Collections.sort(list, new Comparator<WordIDF>() {
+
+			@Override
+			public int compare(WordIDF o1, WordIDF o2) {
+
+				return Double.compare(o1.getIdf(), o2.getIdf());
+			}
+
+		});
+
+		System.out.println(idfTable.getSmoothingNullValue());
+
+		int count = 0;
+		for (WordIDF word : list) {
+			if (maxNumOfResults != -1 && ++count > maxNumOfResults) {
+				break;
+			}
+
+			System.out.println(word.getWord() + "\t" + word.getIdf());
 		}
-
-		return idfTable;
 	}
 }

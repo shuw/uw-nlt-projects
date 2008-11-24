@@ -16,7 +16,9 @@ public class PlainWordParser implements WordParser {
 		ArrayList<Word> words = new ArrayList<Word>(wordStrs.length);
 		for (String word : wordStrs) {
 
-			words.add(new Word(word));
+			if (!"".equals(word)) {
+				words.add(new Word(word));
+			}
 		}
 		return words;
 

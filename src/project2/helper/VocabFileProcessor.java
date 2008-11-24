@@ -1,29 +1,26 @@
 package project2.helper;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 
 import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.FileProcessor;
-import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.Singletons;
 
 public class VocabFileProcessor implements FileProcessor {
 	private GoldStandard goldStandard;
-	private IDFTable idfTable = new IDFTable();
+	private IDFTableBuilder idfTableBuilder = new IDFTableBuilder();
 
 	private WordCountProcessor lingProcessor = new WordCountProcessor();
 	private WordCountProcessor nonLingProcessor = new WordCountProcessor();
-
-	private int fileProcessedCount;
 
 	public VocabFileProcessor(GoldStandard goldStandard) {
 		super();
@@ -35,16 +32,10 @@ public class VocabFileProcessor implements FileProcessor {
 		// remove file suffix
 		String canonicalName = file.getName().replaceFirst(".txt*", "");
 
-		// if (Globals.IsDebugEnabled) {
-		// Only process 100 files to speed up development
-		// if (fileProcessedCount > 100)
-		// break;
-		// }
-
 		if (goldStandard.isCategorized(canonicalName)) {
 			BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
 			InputUtil.process(file, bagOfWordsProcessor);
-			idfTable.addDocument(bagOfWordsProcessor.getWords());
+			idfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
 
 			if (goldStandard.isLinguistic(canonicalName)) {
 
@@ -56,12 +47,11 @@ public class VocabFileProcessor implements FileProcessor {
 		} else {
 			System.err.println("Uncategorized file: " + canonicalName);
 		}
-		fileProcessedCount++;
 
 	}
 
-	public void printResult(PrintStream out, int maxSizeOfVocab) {
-
+	public void printResult(int maxSizeOfVocab) {
+		IDFTable idfTable = idfTableBuilder.build();
 		KeyCounterTable<Word> lingCounter = lingProcessor.getCounter();
 		KeyCounterTable<Word> nonLingCounter = nonLingProcessor.getCounter();
 
