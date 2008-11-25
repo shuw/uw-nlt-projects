@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
+import edu.nlt.shallow.data.tags.Word;
+
 public class DocumentVector {
 
 	private Hashtable<String, DocumentFeature> table;
@@ -29,6 +31,10 @@ public class DocumentVector {
 
 	public Collection<DocumentFeature> values() {
 		return table.values();
+	}
+
+	public DocumentFeature getFeature(Word word) {
+		return table.get(word.getKey());
 	}
 
 	public void print() {
