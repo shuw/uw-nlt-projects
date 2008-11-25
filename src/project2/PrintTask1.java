@@ -9,7 +9,7 @@ import project2.processor.GoldStandard;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.FileProcessor;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 
 public class PrintTask1 {
 	/**
@@ -96,7 +96,7 @@ class TestProcessor implements FileProcessor {
 		double precision = (double) truePositives / (double) documentsRetrieved;
 		double recall = (double) truePositives / (double) relevantDocuments;
 
-		System.out.println("Precision\t" + Singletons.PercentageFormatter.format(precision));
-		System.out.println("Recall:\t\t" + Singletons.PercentageFormatter.format(recall));
+		System.out.println("Precision\t" + Formatters.PercentageFormatter.format(precision));
+		System.out.println("Recall:\t\t" + Formatters.PercentageFormatter.format(recall));
 	}
 }

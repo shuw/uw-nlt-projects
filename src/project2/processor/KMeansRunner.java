@@ -35,6 +35,7 @@ public class KMeansRunner {
 	private KMeansAlgorithm bestAlgorithm;
 	private GoldStandard goldStandard;
 	private int minWrongClassifications;
+	private double averageWrongClassifications;
 
 	private Collection<DocumentVector> vectors;
 
@@ -74,6 +75,7 @@ public class KMeansRunner {
 
 		System.out.print(wrongClassifications + " ");
 
+		averageWrongClassifications += wrongClassifications;
 		if (wrongClassifications < minWrongClassifications) {
 			minWrongClassifications = wrongClassifications;
 			bestAlgorithm = clusteringAlg;
@@ -86,6 +88,10 @@ public class KMeansRunner {
 
 	public int getMinWrongClassifications() {
 		return minWrongClassifications;
+	}
+
+	public double getAverageWrongClassifications() {
+		return averageWrongClassifications;
 	}
 
 	public void printClusters() {
@@ -107,6 +113,7 @@ public class KMeansRunner {
 
 	public void run(int clusters, int iterations) {
 		minWrongClassifications = Integer.MAX_VALUE;
+		averageWrongClassifications = 0;
 		bestAlgorithm = null;
 
 		for (int iteration = 0; iteration < iterations; iteration++) {
@@ -115,5 +122,7 @@ public class KMeansRunner {
 			runIteration(goldStandard, new KMeansAlgorithm(vectors, vocabulary, clusters));
 
 		}
+
+		averageWrongClassifications /= iterations;
 	}
 }

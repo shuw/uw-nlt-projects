@@ -12,7 +12,7 @@ import edu.nlt.tools.CompareResult;
 import edu.nlt.tools.TagComparer;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.LineCompareProcessor;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 
 public class PrintAccuracy {
 
@@ -63,7 +63,7 @@ public class PrintAccuracy {
 		System.out.println();
 		System.out.println("Total # of morphemes evaluated:\t" + result.getMorphemeCount());
 		System.out.println("Accuracy:\t"
-				+ Singletons.PercentageFormatter.format(result.getAccuracy()));
+				+ Formatters.PercentageFormatter.format(result.getAccuracy()));
 
 	}
 }

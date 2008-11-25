@@ -4,21 +4,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
 import project2.data.DocumentResult;
 import project2.data.Vocabulary;
+import edu.nlt.external.PorterStemmer;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.PlainWordParser;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.VectorUtil;
 import edu.nlt.util.processor.LineProcessor;
 
 public class SearchProcessor implements LineProcessor {
+
+	private static final boolean useStemming = true;
+
+	private PorterStemmer stemmer = new PorterStemmer();
+
+	/**
+	 * Map stemmed words to their original in the vocabulary
+	 */
+	private Hashtable<String, HashSet<String>> stemmedVocabTable = new Hashtable<String, HashSet<String>>();
 
 	private Hashtable<DocumentVector, double[]> vectorTable = new Hashtable<DocumentVector, double[]>();
 
@@ -30,7 +41,8 @@ public class SearchProcessor implements LineProcessor {
 		super();
 		this.vocabulary = vocabulary;
 
-		initVectors(documents);
+		initStemTable();
+		init(documents);
 	}
 
 	private List<DocumentResult> getResults(double[] searchQueryNormalized) {
@@ -62,8 +74,34 @@ public class SearchProcessor implements LineProcessor {
 			ArrayList<DocumentFeature> features = new ArrayList<DocumentFeature>();
 
 			for (Word word : wordParser.getWords(value)) {
-				features.add(new DocumentFeature(word, 1));
+
+				if (useStemming) {
+					// Expand query word to all it's unstemmed versions in the
+					// vocabulary
+					String stemmedWord = stemmer.stripAffixes(word.getKey());
+
+					HashSet<String> expandedWords = stemmedVocabTable.get(stemmedWord);
+
+					if (expandedWords != null) {
+						for (String expandedWord : expandedWords) {
+							features.add(new DocumentFeature(new Word(expandedWord), 1));
+						}
+
+					} else {
+						features.add(new DocumentFeature(word, 1));
+					}
+
+				} else {
+					features.add(new DocumentFeature(word, 1));
+				}
+
 			}
+
+			for (DocumentFeature feature : features) {
+				System.out.print(feature.getWord() + " ");
+			}
+			System.out.println();
+
 			return VectorUtil.getNormalizedVector(features, vocabulary);
 
 		} catch (ParserException e) {
@@ -73,13 +111,32 @@ public class SearchProcessor implements LineProcessor {
 
 	}
 
-	private void initVectors(Collection<DocumentVector> documents) {
+	private void init(Collection<DocumentVector> documents) {
 
 		for (DocumentVector document : documents) {
 
 			double[] vector = VectorUtil.getNormalizedVector(document.values(), vocabulary);
 
 			vectorTable.put(document, vector);
+
+		}
+
+	}
+
+	private void initStemTable() {
+
+		for (String word : vocabulary.values()) {
+
+			String stemmedWord = stemmer.stripAffixes(word);
+
+			HashSet<String> originalWords = stemmedVocabTable.get(stemmedWord);
+
+			if (originalWords == null) {
+				originalWords = new HashSet<String>();
+				stemmedVocabTable.put(stemmedWord, originalWords);
+			}
+
+			originalWords.add(word);
 
 		}
 
@@ -94,7 +151,7 @@ public class SearchProcessor implements LineProcessor {
 			}
 
 			System.out.println(result.getDocument().getVectorName() + "\t"
-					+ Singletons.FractionFormatter.format(result.getScore()));
+					+ Formatters.FractionFormatter.format(result.getScore()));
 
 		}
 

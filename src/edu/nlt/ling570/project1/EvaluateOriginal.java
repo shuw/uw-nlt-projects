@@ -14,7 +14,7 @@ import edu.nlt.tools.CompareResult;
 import edu.nlt.tools.TagCompareResult;
 import edu.nlt.tools.TagComparer;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.processor.LineProcessor;
 
 public class EvaluateOriginal {
@@ -60,7 +60,7 @@ public class EvaluateOriginal {
 		System.out.println();
 		System.out.println("Total # of morphemes evaluated:\t" + compareResult.getMorphemeCount());
 		System.out.println("Accuracy:\t"
-				+ Singletons.PercentageFormatter.format(compareResult.getAccuracy()));
+				+ Formatters.PercentageFormatter.format(compareResult.getAccuracy()));
 
 	}
 

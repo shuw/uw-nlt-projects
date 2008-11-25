@@ -17,7 +17,7 @@ import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.MathUtil;
 import edu.nlt.util.PTBParser;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.processor.LineProcessor;
 
 public class hw2b {
@@ -44,7 +44,7 @@ public class hw2b {
 				double probBase2 = MathUtil.getLogBase2(prob);
 
 				out.print("\t"
-						+ (probBase2 != Double.NEGATIVE_INFINITY ? Singletons.FractionFormatter
+						+ (probBase2 != Double.NEGATIVE_INFINITY ? Formatters.FractionFormatter
 								.format(probBase2) : "-Inf"));
 
 			}
@@ -75,7 +75,7 @@ public class hw2b {
 				double probBase2 = MathUtil.getLogBase2(prob);
 
 				out.print(" "
-						+ (probBase2 != Double.NEGATIVE_INFINITY ? Singletons.FractionFormatter
+						+ (probBase2 != Double.NEGATIVE_INFINITY ? Formatters.FractionFormatter
 								.format(probBase2) : "-Inf      "));
 			}
 

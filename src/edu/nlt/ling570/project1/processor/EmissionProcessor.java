@@ -13,7 +13,7 @@ import edu.nlt.shallow.parser.LDC2004T03Parser;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.TagParser;
 import edu.nlt.util.Globals;
-import edu.nlt.util.Singletons;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.processor.LineProcessor;
 
 public class EmissionProcessor implements LineProcessor {
@@ -36,7 +36,7 @@ public class EmissionProcessor implements LineProcessor {
 
 			for (Emission<Keyable> emission : emissions) {
 				out.println(emission.getWord() + "|" + tag + " "
-						+ Singletons.FractionFormatter.format(emission.getProbability()));
+						+ Formatters.FractionFormatter.format(emission.getProbability()));
 			}
 		}
 
