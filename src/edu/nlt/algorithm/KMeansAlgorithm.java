@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.Stack;
 
 import project2.data.Vocabulary;
+import project2.processor.GoldStandard;
 
 import edu.nlt.shallow.data.WordMagnitude;
 import edu.nlt.shallow.data.tags.Word;
@@ -74,11 +77,16 @@ public class KMeansAlgorithm {
 
 	private NamedVector[] vectorsNormalized;
 
-	public KMeansAlgorithm(Collection<DocumentVector> vectors, Vocabulary vocabulary, int clusters) {
+	private static final boolean seedClusters = true;
+
+	private GoldStandard goldStandard;
+
+	public KMeansAlgorithm(Collection<DocumentVector> vectors, Vocabulary vocabulary, int clusters,
+			GoldStandard goldStandard) {
 		super();
 
 		this.vectorSize = vocabulary.size();
-
+		this.goldStandard = goldStandard;
 		initVectors(vectors, vocabulary);
 
 		initClusters(clusters);
@@ -87,25 +95,91 @@ public class KMeansAlgorithm {
 	private void initClusters(int clusters) {
 
 		clusterCentroidsNormalized = new Vector[clusters];
-
 		Random random = new Random();
 
-		// Initialize random values
-		for (int cIndex = 0; cIndex < clusters; cIndex++) {
-			double[] centroid = new double[vectorSize];
+		if (seedClusters) {
 
-			for (int vectorIndex = 0; vectorIndex < vectorSize; vectorIndex++) {
+			ArrayList<NamedVector> linguisticVectors = new ArrayList<NamedVector>();
+			ArrayList<NamedVector> nonLinguisticVectors = new ArrayList<NamedVector>();
 
-				centroid[vectorIndex] = random.nextDouble();
+			for (NamedVector vector : vectorsNormalized) {
 
+				if (goldStandard.isLinguistic(vector.getName())) {
+					linguisticVectors.add(vector);
+				} else {
+					nonLinguisticVectors.add(vector);
+				}
 			}
 
-			VectorUtil.normalize(centroid);
+			boolean randomBoolean = random.nextDouble() < 0.5d;
 
-			clusterCentroidsNormalized[cIndex] = new Vector(centroid);
+			// distribute clusters evenly
 
+			for (int i = 0; i < clusterCentroidsNormalized.length; i++) {
+				// alternate between ling / non-ling clusters
+				boolean linguisticCluster = i % 2 != 0;
+
+				// randomize starting cluster
+				if (randomBoolean) {
+					linguisticCluster = !linguisticCluster;
+				}
+
+				ArrayList<NamedVector> chosenVectors = linguisticCluster ? linguisticVectors
+						: nonLinguisticVectors;
+
+				Cluster cluster = new Cluster();
+
+				// divide the remainder evengly between ling / non-ling
+				int remainingClusters = (clusterCentroidsNormalized.length - i - 1) / 2;
+
+				int vectorsToChose = chosenVectors.size() / (remainingClusters + 1);
+
+				for (int j = 0; j < vectorsToChose; j++) {
+
+					int randomIndex = (int) (random.nextDouble() * (chosenVectors.size() - 1));
+					cluster.addVector(chosenVectors.remove(randomIndex));
+				}
+
+				clusterCentroidsNormalized[i] = new Vector(cluster.getCentroidNormalized());
+			}
+
+		} else {
+			// Initialize random values
+			for (int i = 0; i < clusterCentroidsNormalized.length; i++) {
+				double[] centroid = new double[vectorSize];
+
+				for (int vectorIndex = 0; vectorIndex < vectorSize; vectorIndex++) {
+
+					centroid[vectorIndex] = random.nextDouble();
+
+				}
+
+				VectorUtil.normalize(centroid);
+
+				clusterCentroidsNormalized[i] = new Vector(centroid);
+
+			}
 		}
 
+	}
+
+	public void runIteration() {
+
+		prevClusters = clusters;
+
+		clusters = getClusters(vectorsNormalized, clusterCentroidsNormalized);
+
+		// Assign new centroids
+		//
+		for (int i = 0; i < clusterCentroidsNormalized.length; i++) {
+
+			Cluster cluster = clusters[i];
+
+			if (cluster.getVectors().size() > 0) {
+
+				clusterCentroidsNormalized[i] = new Vector(cluster.getCentroidNormalized());
+			}
+		}
 	}
 
 	/**
@@ -210,28 +284,6 @@ public class KMeansAlgorithm {
 		return errorCount == 0;
 	}
 
-	public void runIteration() {
-
-		prevClusters = clusters;
-
-		clusters = getClusters(vectorsNormalized, clusterCentroidsNormalized);
-
-		// Assign new centroids
-		//
-		for (int i = 0; i < clusterCentroidsNormalized.length; i++) {
-
-			Cluster cluster = clusters[i];
-
-			if (cluster.getVectors().size() > 0) {
-				double[] centroid = VectorUtil.getCentroid(cluster.getVectorsRaw());
-
-				VectorUtil.normalize(centroid);
-
-				clusterCentroidsNormalized[i] = new Vector(centroid);
-			}
-		}
-	}
-
 	public static class Cluster {
 		private Hashtable<String, NamedVector> vectorTable = new Hashtable<String, NamedVector>();
 
@@ -251,6 +303,15 @@ public class KMeansAlgorithm {
 			}
 
 			return vectorsRaw;
+		}
+
+		public double[] getCentroidNormalized() {
+			double[] centroid = VectorUtil.getCentroid(getVectorsRaw());
+
+			VectorUtil.normalize(centroid);
+
+			return centroid;
+
 		}
 
 		public boolean containsVector(String vectorName) {

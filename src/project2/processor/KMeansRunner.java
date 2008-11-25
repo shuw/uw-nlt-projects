@@ -119,7 +119,8 @@ public class KMeansRunner {
 		for (int iteration = 0; iteration < iterations; iteration++) {
 
 			// Repeat algorithm several times with different seeds
-			runIteration(goldStandard, new KMeansAlgorithm(vectors, vocabulary, clusters));
+			runIteration(goldStandard, new KMeansAlgorithm(vectors, vocabulary, clusters,
+					goldStandard));
 
 		}
 
