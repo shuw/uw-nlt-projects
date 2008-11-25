@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Random;
 
+import project2.data.Vocabulary;
+
 import edu.nlt.shallow.data.WordMagnitude;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
@@ -72,8 +74,7 @@ public class KMeansAlgorithm {
 
 	private NamedVector[] vectorsNormalized;
 
-	public KMeansAlgorithm(Collection<DocumentVector> vectors, HashSet<String> vocabulary,
-			int clusters) {
+	public KMeansAlgorithm(Collection<DocumentVector> vectors, Vocabulary vocabulary, int clusters) {
 		super();
 
 		this.vectorSize = vocabulary.size();
@@ -110,15 +111,14 @@ public class KMeansAlgorithm {
 	/**
 	 * Create more efficient representation fo vocabulary
 	 */
-	private void initVectors(Collection<DocumentVector> docVectors, HashSet<String> vocabulary) {
-
+	private void initVectors(Collection<DocumentVector> docVectors, Vocabulary vocabulary) {
 
 		// Map each word to an array index
 		indexToWord = new String[vocabulary.size()];
 		Hashtable<String, Integer> wordToIndex = new Hashtable<String, Integer>(vectorSize);
 		{
 			int index = 0;
-			for (String wordStr : vocabulary) {
+			for (String wordStr : vocabulary.values()) {
 				wordToIndex.put(wordStr, index);
 				indexToWord[index] = wordStr;
 				index++;
@@ -139,9 +139,6 @@ public class KMeansAlgorithm {
 
 					vector[index] = feature.getMagnitude();
 
-				} else {
-					(new Exception("Could not find vector in vocabulary"))
-							.printStackTrace(System.err);
 				}
 			}
 

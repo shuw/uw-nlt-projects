@@ -8,18 +8,27 @@ public class WordIDF {
 
 	private double idf;
 
-	public WordIDF(Word word, double idf) {
+	private int documentCount;
+	
+	
+
+	public WordIDF(Word word, double idf, int documentCount) {
 		super();
 		this.word = word;
 		this.idf = idf;
+		this.documentCount = documentCount;
 	}
 
 	public Word getWord() {
 		return word;
 	}
 
-	public double getIdf() {
+	public double getIDF() {
 		return idf;
+	}
+	
+	public int getDocumentCount() {
+		return documentCount;
 	}
 
 }

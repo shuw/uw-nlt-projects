@@ -5,31 +5,34 @@ import java.util.Hashtable;
 
 import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.tags.Word;
+import edu.nlt.util.Globals;
 
 public class IDFTable {
 
 	private Hashtable<String, WordIDF> table;
 
-	private double smoothingNullValue;
-
-	public IDFTable(Hashtable<String, WordIDF> table, double smoothingNullValue) {
+	public IDFTable(Hashtable<String, WordIDF> table) {
 		super();
 		this.table = table;
-		this.smoothingNullValue = smoothingNullValue;
+
 	}
 
-	public double getIDF(Word word) {
+	public int size() {
+		return table.size();
+	}
+
+	public WordIDF getWordIDF(Word word) {
 		WordIDF result = table.get(word.getKey());
 		if (result != null) {
-			return result.getIdf();
+			return result;
 		} else {
-			return smoothingNullValue;
+			if (Globals.IsDebugEnabled) {
+				return null;
+			} else {
+				return new WordIDF(word, 0, 0);
+			}
 		}
 
-	}
-
-	public double getSmoothingNullValue() {
-		return smoothingNullValue;
 	}
 
 	public Collection<WordIDF> values() {

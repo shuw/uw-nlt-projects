@@ -24,7 +24,7 @@ public class VectorProcessor implements LineProcessor {
 			currentVectorName = value.split("\t")[1];
 			currentVectorTable = new Hashtable<String, DocumentFeature>();
 
-		} else if (!"".equals(value)) {
+		} else if (!value.startsWith("processing:") && value.length() > 0) {
 
 			String[] components = value.split("\t");
 

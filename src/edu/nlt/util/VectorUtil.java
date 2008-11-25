@@ -1,9 +1,9 @@
 package edu.nlt.util;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Hashtable;
 
+import project2.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 
 public class VectorUtil {
@@ -12,15 +12,15 @@ public class VectorUtil {
 
 		double length = getLength(vector);
 
-		for (int dimension = 0; dimension < vector.length; dimension++) {
-
-			vector[dimension] /= length;
-
+		if (length != 0) {
+			for (int dimension = 0; dimension < vector.length; dimension++) {
+				vector[dimension] /= length;
+			}
 		}
 	}
 
 	public static double[] getNormalizedVector(Collection<DocumentFeature> features,
-			HashSet<String> vocabulary) {
+			Vocabulary vocabulary) {
 
 		int vectorSize = vocabulary.size();
 
@@ -29,7 +29,7 @@ public class VectorUtil {
 
 		{
 			int index = 0;
-			for (String wordStr : vocabulary) {
+			for (String wordStr : vocabulary.values()) {
 				wordToIndex.put(wordStr, index);
 
 				index++;
@@ -46,8 +46,6 @@ public class VectorUtil {
 
 				vector[index] = feature.getMagnitude();
 
-			} else {
-				(new Exception("Could not find vector in vocabulary")).printStackTrace(System.err);
 			}
 		}
 

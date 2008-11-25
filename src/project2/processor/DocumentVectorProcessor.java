@@ -1,10 +1,9 @@
 package project2.processor;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 
+import project2.data.Vocabulary;
 import edu.nlt.shallow.data.CountHolder;
-import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
@@ -13,19 +12,18 @@ import edu.nlt.util.processor.WordProcessor;
 
 public class DocumentVectorProcessor implements WordProcessor {
 
-	private IDFTable idfTable;
-	private HashSet<String> vocabulary;
+	private Vocabulary vocabulary;
 	private KeyCounterTable<Word> counter = new KeyCounterTable<Word>();
 
-	public DocumentVectorProcessor(IDFTable idfTable, HashSet<String> vocabulary) {
+	public DocumentVectorProcessor(Vocabulary vocabulary) {
 		super();
-		this.idfTable = idfTable;
+
 		this.vocabulary = vocabulary;
 	}
 
 	@Override
 	public void processWord(Word word) {
-		if (vocabulary.contains(word.getKey())) {
+		if (vocabulary.contains(word)) {
 			counter.add(word);
 		}
 	}
@@ -37,7 +35,7 @@ public class DocumentVectorProcessor implements WordProcessor {
 		for (CountHolder<Word> wordCount : counter.values()) {
 
 			Word word = wordCount.getComponent();
-			double tfIdf = (double) wordCount.getCount() * idfTable.getIDF(word);
+			double tfIdf = (double) wordCount.getCount() * vocabulary.getWordIDF(word).getIDF();
 
 			DocumentFeature feature = new DocumentFeature(word, tfIdf);
 

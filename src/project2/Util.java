@@ -2,25 +2,22 @@ package project2;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashSet;
 
 import project2.data.LinguisticCluster;
+import project2.data.Vocabulary;
 import project2.processor.ClustersProcessor;
 import project2.processor.DocumentVectorProcessor;
-import project2.processor.FileIDFBuilder;
+import project2.processor.FileVocabularyBuilder;
 import project2.processor.GoldStandard;
 import project2.processor.GoldStandardProcessor;
 import project2.processor.PlainWordProcessor;
-import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.processor.LineProcessor;
 
 public class Util {
-	public static DocumentVector getDocumentVector(File file, IDFTable idfTable,
-			HashSet<String> vocab) {
+	public static DocumentVector getDocumentVector(File file, Vocabulary vocab) {
 
-		DocumentVectorProcessor processor = new DocumentVectorProcessor(idfTable, vocab);
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocab);
 
 		InputUtil.process(file, new PlainWordProcessor(processor));
 
@@ -28,15 +25,14 @@ public class Util {
 
 	}
 
-	public static DocumentVector getDocumentVector(IDFTable idfTable, HashSet<String> vocabulary,
-			File file) {
-		DocumentVectorProcessor processor = new DocumentVectorProcessor(idfTable, vocabulary);
+	public static DocumentVector getDocumentVector(Vocabulary vocabulary, File file) {
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocabulary);
 		InputUtil.process(System.in, new PlainWordProcessor(processor));
 		return processor.getDocumentVector();
 
 	}
 
-	public static Collection<LinguisticCluster> getClusters(File file, HashSet<String> vocabulary) {
+	public static Collection<LinguisticCluster> getClusters(File file, Vocabulary vocabulary) {
 
 		ClustersProcessor processor = new ClustersProcessor(vocabulary);
 		InputUtil.process(file, processor);
@@ -44,19 +40,12 @@ public class Util {
 		return processor.getVectors();
 	}
 
-	public static HashSet<String> getVocabulary(File file) {
-		final HashSet<String> vocabulary = new HashSet<String>();
+	public static Vocabulary getVocabulary(File file, int maxVocabSize) {
 
-		InputUtil.process(file, new LineProcessor() {
+		FileVocabularyBuilder builder = new FileVocabularyBuilder(maxVocabSize);
+		InputUtil.process(file, builder);
 
-			@Override
-			public void processLine(String value) {
-				vocabulary.add(value.split("\t")[0]);
-
-			}
-		});
-
-		return vocabulary;
+		return builder.build();
 	}
 
 	public static GoldStandard getGoldStandard(File file) {
@@ -68,9 +57,4 @@ public class Util {
 		return processor.getGoldStandard();
 	}
 
-	public static IDFTable getIDFTable(File file) {
-		FileIDFBuilder builder = new FileIDFBuilder();
-		InputUtil.process(file, builder);
-		return builder.build();
-	}
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import project2.data.Vocabulary;
 import project2.processor.BagOfWordsProcessor;
 import project2.processor.PlainWordProcessor;
 import edu.nlt.shallow.data.WordIDF;
@@ -22,13 +23,17 @@ public class PrintIDFTable {
 	 * @param args
 	 * 
 	 *            args[0] Location of files
+	 * 
+	 *            args[1] Filter by vocabulary
 	 */
 	public static void main(String[] args) {
 
 		IDFProcessor processor = new IDFProcessor();
 		InputUtil.processFiles(args[0], processor);
 
-		processor.printResults(-1);
+		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), -1);
+
+		processor.printResults(vocabulary);
 	}
 
 }
@@ -44,7 +49,7 @@ class IDFProcessor implements FileProcessor {
 
 	}
 
-	public void printResults(int maxNumOfResults) {
+	public void printResults(Vocabulary vocabulary) {
 
 		IDFTable idfTable = idfTableBuilder.build();
 
@@ -54,20 +59,21 @@ class IDFProcessor implements FileProcessor {
 			@Override
 			public int compare(WordIDF o1, WordIDF o2) {
 
-				return Double.compare(o1.getIdf(), o2.getIdf());
+				return Double.compare(o1.getIDF(), o2.getIDF());
 			}
 
 		});
 
-		System.out.println(idfTable.getSmoothingNullValue());
-
-		int count = 0;
+		// int count = 0;
 		for (WordIDF word : list) {
-			if (maxNumOfResults != -1 && ++count > maxNumOfResults) {
-				break;
-			}
+			// if (maxNumOfResults != -1 && ++count > maxNumOfResults) {
+			// break;
+			// }
 
-			System.out.println(word.getWord() + "\t" + word.getIdf());
+			if (vocabulary.contains(word.getWord())) {
+
+				System.out.println(word.getWord() + "\t" + word.getIDF());
+			}
 		}
 	}
 }

@@ -12,11 +12,11 @@ public class LinguisticCluster {
 	private Hashtable<String, DocumentFeature> table;
 
 	private boolean isLinguistic;
-	private HashSet<String> vocabulary;
+	private Vocabulary vocabulary;
 
 	private double[] vector;
 
-	public LinguisticCluster(Hashtable<String, DocumentFeature> table, HashSet<String> vocabulary,
+	public LinguisticCluster(Hashtable<String, DocumentFeature> table, Vocabulary vocabulary,
 			boolean isLinguistic) {
 		super();
 		this.table = table;

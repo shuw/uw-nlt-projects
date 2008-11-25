@@ -1,12 +1,12 @@
 package project2.processor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
 import project2.data.LinguisticCluster;
+import project2.data.Vocabulary;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.util.processor.LineProcessor;
@@ -15,9 +15,9 @@ public class ClustersProcessor implements LineProcessor {
 
 	private LinkedList<LinguisticCluster> vectors = new LinkedList<LinguisticCluster>();
 
-	private HashSet<String> vocabulary;
+	private Vocabulary vocabulary;
 
-	public ClustersProcessor(HashSet<String> vocabulary) {
+	public ClustersProcessor(Vocabulary vocabulary) {
 		super();
 		this.vocabulary = vocabulary;
 	}

@@ -28,7 +28,7 @@ public class PrintVocabulary {
 			VocabFileProcessor processor = new VocabFileProcessor(goldStandard);
 			InputUtil.processFiles(inputFilesPath, processor);
 
-			processor.printResult(2000);
+			processor.printResult(10000);
 		}
 	}
 

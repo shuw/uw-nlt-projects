@@ -10,7 +10,7 @@ import project2.processor.VectorProcessor;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
 
-public class PrintClusters {
+public class PrintClustersHillClimb {
 
 	/**
 	 * @param args
@@ -33,14 +33,19 @@ public class PrintClusters {
 
 		Collection<DocumentVector> vectors = processor.getVectors();
 
-		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), 2900);
-		KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
+		for (int vocabSize = 50; vocabSize <= 10000; vocabSize += 50) {
 
-		runner.run(3, 100);
+			Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), vocabSize);
+			KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-		// System.out.println("Wrong classifications: " +
-		// runner.getMinWrongClassifications());
-		runner.printClusters();
+			for (int clusters = 3; clusters <= 3; clusters++) {
+				System.out.println("\nVocab size: " + vocabSize + " | Cluster size: " + clusters);
+				runner.run(clusters, 100);
+
+				System.out.println();
+				System.out.println("Wrong classifications: " + runner.getMinWrongClassifications());
+			}
+		}
 
 	}
 }

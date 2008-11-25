@@ -27,7 +27,7 @@ public class InputUtil {
 			}
 
 			if (Globals.IsDebugEnabled) {
-				// System.out.println("processing: " + file.getName());
+//				 System.out.println("processing: " + file.getName());
 			}
 
 			processor.processFile(file);

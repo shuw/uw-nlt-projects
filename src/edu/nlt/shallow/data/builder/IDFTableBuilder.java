@@ -54,12 +54,13 @@ public class IDFTableBuilder {
 
 			Word word = wordCount.getComponent();
 
-			WordIDF value = new WordIDF(word, getIDF(wordCount.getComponent()));
+			WordIDF value = new WordIDF(word, getIDF(wordCount.getComponent()), wordCount
+					.getCount());
 			idfTable.put(word.getKey(), value);
 
 		}
 
-		return new IDFTable(idfTable, getIDF(numOfDocuments, 1));
+		return new IDFTable(idfTable);
 	}
 
 }

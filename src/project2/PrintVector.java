@@ -1,9 +1,8 @@
 package project2;
 
 import java.io.File;
-import java.util.HashSet;
 
-import edu.nlt.shallow.data.table.IDFTable;
+import project2.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 
 public class PrintVector {
@@ -13,22 +12,17 @@ public class PrintVector {
 	 * 
 	 * @param args
 	 * 
-	 *            args[0] IDFTable
+	 *            args[0] Vocabulary
 	 * 
-	 *            args[1] Vocabulary
-	 * 
-	 *            args[2] Path to file
+	 *            args[1] Path to file
 	 * 
 	 * 
 	 */
 	public static void main(String[] args) {
 
-		IDFTable idfTable = Util.getIDFTable(new File(args[0]));
+		Vocabulary vocabulary = Util.getVocabulary(new File(args[0]), -1);
 
-		HashSet<String> vocabulary = Util.getVocabulary(new File(args[1]));
-
-		DocumentVector documentVector = Util.getDocumentVector(new File(args[2]), idfTable,
-				vocabulary);
+		DocumentVector documentVector = Util.getDocumentVector(new File(args[1]), vocabulary);
 
 		documentVector.print();
 	}
