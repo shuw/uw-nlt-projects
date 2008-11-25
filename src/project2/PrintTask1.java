@@ -84,11 +84,11 @@ class TestProcessor implements FileProcessor {
 		}
 
 		if (isLinguistic && !isLinguisticGold) {
-			System.out.println("False positive:\t" + file.getName());
+			System.err.println("False positive:\t" + file.getName());
 		}
 
 		else if (!isLinguistic && isLinguisticGold) {
-			System.out.println("False negative :\t" + file.getName());
+			System.err.println("False negative :\t" + file.getName());
 		}
 	}
 
@@ -96,7 +96,7 @@ class TestProcessor implements FileProcessor {
 		double precision = (double) truePositives / (double) documentsRetrieved;
 		double recall = (double) truePositives / (double) relevantDocuments;
 
-		System.out.println("Precision:t" + Singletons.FractionFormatter.format(precision));
-		System.out.println("Recall:\t" + Singletons.FractionFormatter.format(recall));
+		System.out.println("Precision\t" + Singletons.PercentageFormatter.format(precision));
+		System.out.println("Recall:\t\t" + Singletons.PercentageFormatter.format(recall));
 	}
 }
