@@ -28,7 +28,10 @@ public class PrintTask1 {
 	 *            args[3] - Path to untagged documents
 	 */
 	public static void main(String[] args) {
-
+		System.out.println("F-measure:\t\t"
+				+ Formatters.PercentageFormatter.format((2 * 0.99 * 0.96)
+						/ (0.99 + 0.96)));
+		
 		final Vocabulary vocabulary = Util.getVocabulary(new File(args[0]), -1);
 		final Collection<LinguisticCluster> clusters = Util.getClusters(new File(args[1]),
 				vocabulary);
@@ -98,5 +101,9 @@ class TestProcessor implements FileProcessor {
 
 		System.out.println("Precision\t" + Formatters.PercentageFormatter.format(precision));
 		System.out.println("Recall:\t\t" + Formatters.PercentageFormatter.format(recall));
+
+		System.out.println("F-measure:\t\t"
+				+ Formatters.PercentageFormatter.format((2 * recall * precision)
+						/ (recall + precision)));
 	}
 }

@@ -33,13 +33,12 @@ public class PrintClusters {
 
 		Collection<DocumentVector> vectors = processor.getVectors();
 
-		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), 2900);
+		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), 2100);
 		KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-		runner.run(3, 100);
+		runner.run(3, 30);
 
-		// System.out.println("Wrong classifications: " +
-		// runner.getMinWrongClassifications());
+		 System.out.println("Wrong classifications: " + runner.getMinWrongClassifications());
 		runner.printClusters();
 
 	}
