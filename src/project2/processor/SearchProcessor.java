@@ -17,12 +17,13 @@ import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.shallow.parser.ParserException;
 import edu.nlt.shallow.parser.PlainWordParser;
 import edu.nlt.util.Formatters;
+import edu.nlt.util.Globals;
 import edu.nlt.util.VectorUtil;
 import edu.nlt.util.processor.LineProcessor;
 
 public class SearchProcessor implements LineProcessor {
 
-	private static final boolean useStemming = true;
+	private static final boolean useStemming = false;
 
 	private PorterStemmer stemmer = new PorterStemmer();
 
@@ -75,6 +76,8 @@ public class SearchProcessor implements LineProcessor {
 
 			for (Word word : wordParser.getWords(value)) {
 
+				double idf = vocabulary.getWordIDF(word).getIDF();
+
 				if (useStemming) {
 					// Expand query word to all it's unstemmed versions in the
 					// vocabulary
@@ -84,15 +87,15 @@ public class SearchProcessor implements LineProcessor {
 
 					if (expandedWords != null) {
 						for (String expandedWord : expandedWords) {
-							features.add(new DocumentFeature(new Word(expandedWord), 1));
+							features.add(new DocumentFeature(new Word(expandedWord), idf));
 						}
 
 					} else {
-						features.add(new DocumentFeature(word, 1));
+						features.add(new DocumentFeature(word, idf));
 					}
 
 				} else {
-					features.add(new DocumentFeature(word, 1));
+					features.add(new DocumentFeature(word, idf));
 				}
 
 			}
@@ -144,15 +147,44 @@ public class SearchProcessor implements LineProcessor {
 
 	private void printResults(List<DocumentResult> results) {
 
-		int resultsToShow = 20;
+		int resultCount = 1;
+		double topScore = results.get(0).getScore();
+
+		double accumulatedScore = 0;
 		for (DocumentResult result : results) {
-			if (resultsToShow-- == 0 || result.getScore() == 0) {
-				break;
+
+			// Always how top 3 results
+			if (resultCount > 3) {
+
+				double averageScore = accumulatedScore / resultCount;
+
+				boolean cutoffReached = false;
+				// Stop if the score if below half of average
+				if (result.getScore() < averageScore / 2d) {
+					cutoffReached = true;
+				}
+
+				// Stop if the score drops below 1/5th of top result
+				if (result.getScore() < topScore / 3d) {
+					cutoffReached = true;
+				}
+
+				if (cutoffReached) {
+
+					if (Globals.IsDebugEnabled) {
+						System.out.println("Document after cutoff:"
+								+ result.getDocument().getVectorName() + "\t"
+								+ Formatters.FractionFormatter.format(result.getScore()));
+					}
+					break;
+				}
 			}
 
 			System.out.println(result.getDocument().getVectorName() + "\t"
 					+ Formatters.FractionFormatter.format(result.getScore()));
+			accumulatedScore += result.getScore();
 
+			resultCount++;
 		}
 
 	}

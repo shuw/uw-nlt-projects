@@ -17,7 +17,7 @@ import edu.nlt.util.InputUtil;
 public class Util {
 	public static DocumentVector getDocumentVector(File file, Vocabulary vocab) {
 
-		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocab);
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocab, file.getName());
 
 		InputUtil.process(file, new PlainWordProcessor(processor));
 
@@ -26,7 +26,7 @@ public class Util {
 	}
 
 	public static DocumentVector getDocumentVector(Vocabulary vocabulary, File file) {
-		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocabulary);
+		DocumentVectorProcessor processor = new DocumentVectorProcessor(vocabulary, file.getName());
 		InputUtil.process(System.in, new PlainWordProcessor(processor));
 		return processor.getDocumentVector();
 

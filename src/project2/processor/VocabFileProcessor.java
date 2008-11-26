@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Hashtable;
 
 import edu.nlt.shallow.data.CountHolder;
@@ -13,6 +14,7 @@ import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.Word;
+import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.util.FileProcessor;
 import edu.nlt.util.InputUtil;
 
@@ -29,6 +31,11 @@ public class VocabFileProcessor implements FileProcessor {
 		super();
 		this.goldStandard = goldStandard;
 	}
+
+	private Hashtable<String, DocumentFeature> L_TFFeatures = new Hashtable<String, DocumentFeature>();
+	private Hashtable<String, DocumentFeature> NL_TFFeatures = new Hashtable<String, DocumentFeature>();
+
+	public static final boolean DocumentNormalizedTermFrequency = true;
 
 	@Override
 	public void processFile(File file) {
@@ -49,13 +56,53 @@ public class VocabFileProcessor implements FileProcessor {
 				InputUtil.process(file, new PlainWordProcessor(nonLingProcessor));
 			}
 
+			if (DocumentNormalizedTermFrequency) {
+				KeyCounterTable<Word> counter;
+				{
+					WordCountProcessor processor = new WordCountProcessor();
+					InputUtil.process(file, new PlainWordProcessor(processor));
+					counter = processor.getCounter();
+				}
+
+				for (String word : bagOfWordsProcessor.getWords()) {
+
+					Hashtable<String, DocumentFeature> TFFeatures = goldStandard
+							.isLinguistic(fileName) ? L_TFFeatures : NL_TFFeatures;
+
+					DocumentFeature feature = TFFeatures.get(word);
+
+					if (feature == null) {
+						feature = new DocumentFeature(new Word(word), 0);
+						TFFeatures.put(word, feature);
+					}
+					double tf = (double) counter.getCount(feature.getWord())
+							/ (double) counter.getTotalCount();
+					feature.addMagnitude(tf);
+
+				}
+
+			}
+
 		} else {
 			System.err.println("Uncategorized file: " + fileName);
 		}
 
 	}
 
-	private static final boolean weightTermFrequency = true;
+	private static final boolean UseWeightTermFrequency = true;
+
+	private void normalizeTermFrequencies() {
+
+		double normalizeDocumentsSize = (double) LidfTableBuilder.getNumOfDocuments()
+				/ (double) NLidfTableBuilder.getNumOfDocuments();
+
+		for (DocumentFeature feature : NL_TFFeatures.values()) {
+
+			feature.setMagnitude(feature.getMagnitude() * normalizeDocumentsSize);
+
+		}
+
+	}
 
 	public void printResult(int maxSizeOfVocab) {
 		IDFTable LIdfTable = LidfTableBuilder.build();
@@ -66,31 +113,52 @@ public class VocabFileProcessor implements FileProcessor {
 		KeyCounterTable<Word> nonLingCounter = nonLingProcessor.getCounter();
 
 		ArrayList<WordMagnitude> list;
-		if (weightTermFrequency) {
+		if (UseWeightTermFrequency) {
+			normalizeTermFrequencies();
 
 			Hashtable<String, Double> lingTfIdfTable;
 			Hashtable<String, Double> nonlingTfIdfTable;
 			{
-				// calculate global TFIDF
-				//
 
-				lingTfIdfTable = getGlobalTfIdf(globalIdfTable, lingCounter);
-				nonlingTfIdfTable = getGlobalTfIdf(globalIdfTable, nonLingCounter);
+				if (DocumentNormalizedTermFrequency) {
+
+					lingTfIdfTable = getTfIdfTable(globalIdfTable, lingCounter, L_TFFeatures);
+					nonlingTfIdfTable = getTfIdfTable(globalIdfTable, nonLingCounter, NL_TFFeatures);
+				} else {
+					lingTfIdfTable = getTfIdfTable(globalIdfTable, lingCounter, null);
+					nonlingTfIdfTable = getTfIdfTable(globalIdfTable, nonLingCounter, null);
+				}
+
 			}
 			list = new ArrayList<WordMagnitude>(lingTfIdfTable.size());
 
-			for (String word : lingTfIdfTable.keySet()) {
+			HashSet<String> allWords = new HashSet<String>(lingTfIdfTable.size()
+					+ nonlingTfIdfTable.size());
 
-				double lingTfIdf = lingTfIdfTable.get(word);
+			for (String word : lingTfIdfTable.keySet()) {
+				allWords.add(word);
+			}
+
+			for (String word : nonlingTfIdfTable.keySet()) {
+				allWords.add(word);
+			}
+
+			for (String word : allWords) {
+
+				Double lingTfIdf = lingTfIdfTable.get(word);
+				if (lingTfIdf == null) {
+					lingTfIdf = 0d;
+				}
 
 				Double nonLingTfidf = nonlingTfIdfTable.get(word);
-				if (nonLingTfidf != null) {
+				if (nonLingTfidf == null) {
 
-					WordMagnitude x = new WordMagnitude(new Word(word), Math.abs(lingTfIdf
-							- nonLingTfidf));
-					list.add(x);
-
+					nonLingTfidf = 0d;
 				}
+
+				WordMagnitude x = new WordMagnitude(new Word(word), Math.abs(lingTfIdf
+						- nonLingTfidf));
+				list.add(x);
 
 			}
 
@@ -141,7 +209,8 @@ public class VocabFileProcessor implements FileProcessor {
 
 				System.out.print("\t\t" + lingWordCount);
 
-				int docFrequency = LIdfTable.getWordIDF(word).getDocumentCount();
+				int docFrequency = (LIdfTable.getWordIDF(word) != null) ? LIdfTable
+						.getWordIDF(word).getDocumentCount() : 0;
 				System.out.print("\t" + docFrequency);
 
 				// System.out.print("/" +
@@ -158,7 +227,8 @@ public class VocabFileProcessor implements FileProcessor {
 				// System.out.print("/" +
 				// Singletons.FractionFormatter.format(nonLingTfIdf));
 
-				int docFrequency = NLIdfTable.getWordIDF(word).getDocumentCount();
+				int docFrequency = (NLIdfTable.getWordIDF(word) != null) ? NLIdfTable.getWordIDF(
+						word).getDocumentCount() : 0;
 				System.out.print("\t" + docFrequency);
 
 			}
@@ -170,21 +240,30 @@ public class VocabFileProcessor implements FileProcessor {
 		}
 	}
 
-	private static Hashtable<String, Double> getGlobalTfIdf(IDFTable idfTable,
-			KeyCounterTable<Word> counterTable) {
+	private static Hashtable<String, Double> getTfIdfTable(IDFTable idfTable,
+			KeyCounterTable<Word> counterTable, Hashtable<String, DocumentFeature> tfFeatures) {
 		Hashtable<String, Double> TfIdfTable = new Hashtable<String, Double>();
 
 		// int count = 0;
 		for (CountHolder<Word> wordCounter : counterTable.getReverseSorted()) {
 
 			Word word = wordCounter.getComponent();
-			double tf = (double) wordCounter.getCount() / (double) counterTable.getTotalCount();
+
+			double tf;
+			if (tfFeatures != null) {
+				// Used stored term frequencies which are normalized per
+				// document
+				//
+
+				tf = tfFeatures.get(word.getKey()).getMagnitude();
+			} else {
+				// Calculate term frequencies based on global count
+				//
+
+				tf = (double) wordCounter.getCount() / (double) counterTable.getTotalCount();
+			}
 
 			double tfIdf = tf * idfTable.getWordIDF(word).getIDF();
-
-			// if (count++ < 500) {
-			// System.out.println(word + " " + tfIdf);
-			// }
 
 			TfIdfTable.put(word.getKey(), tfIdf);
 		}

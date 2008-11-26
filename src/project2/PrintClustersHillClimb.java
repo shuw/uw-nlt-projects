@@ -34,12 +34,12 @@ public class PrintClustersHillClimb {
 
 		Collection<DocumentVector> vectors = processor.getVectors();
 
-		for (int vocabSize = 400; vocabSize <= 10000; vocabSize += 100) {
+		for (int vocabSize = 2800; vocabSize <= 2800; vocabSize += 100) {
 
 			Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), vocabSize);
 			KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-			for (int clusters = 2; clusters <= 5; clusters++) {
+			for (int clusters = 3; clusters <= 5; clusters++) {
 				System.out.println("\nVocab size: " + vocabSize + " | Cluster size: " + clusters);
 				runner.run(clusters, 15);
 

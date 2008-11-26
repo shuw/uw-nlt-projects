@@ -8,6 +8,7 @@ import project2.processor.GoldStandard;
 import project2.processor.KMeansRunner;
 import project2.processor.VectorProcessor;
 import edu.nlt.shallow.data.vector.DocumentVector;
+import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
 
 public class PrintClusters {
@@ -33,12 +34,14 @@ public class PrintClusters {
 
 		Collection<DocumentVector> vectors = processor.getVectors();
 
-		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), 2100);
+		Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), 2800);
 		KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-		runner.run(3, 30);
+		runner.run(3, 15);
 
-		 System.out.println("Wrong classifications: " + runner.getMinWrongClassifications());
+		if (Globals.IsDebugEnabled) {
+			System.out.println("Wrong classifications: " + runner.getMinWrongClassifications());
+		}
 		runner.printClusters();
 
 	}

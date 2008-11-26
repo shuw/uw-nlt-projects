@@ -34,7 +34,8 @@ public class Classify {
 		//
 		DocumentVector document;
 		{
-			DocumentVectorProcessor processor = new DocumentVectorProcessor(vocabulary);
+			DocumentVectorProcessor processor = new DocumentVectorProcessor(vocabulary,
+					"Standard input");
 			InputUtil.process(System.in, new PlainWordProcessor(processor));
 			document = processor.getDocumentVector();
 		}

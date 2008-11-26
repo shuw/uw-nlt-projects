@@ -1,1 +1,137 @@
-354 - false negative in gold standard, corrected.
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+** 
+** TASK 1 - Classify lingusitic documents
+**
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+
+*****************************************************************************
+*
+* Step 1. Vocabulary selection
+*
+* project2.PrintVocabulary {path of documents} {gold standard file}
+*
+*****************************************************************************
+
+PrintVocabulary assigns a average text frequency weight to words in the set of linguistic & non-linguistic documents. It also finds the global IDF score from all documents.
+
+For all words that occured, a weight was calculated as follows:
+
+	Weight = absolute( (AverageTextFrequency_Linguistic * LinguisticDocumentFrequencyNormalized - AverageTextFrequencyNonLinguistic * NonLinguisticDocumentFrequencyNormalized) * GlobalIDF)
+
+
+Words were sorted by this weight and the top 10000 were printed. This weighting scheme highlights words with significant differences between Linguistic / Non-linguistic categories. The multiplication factor of GlobalIDF acts as a stop-list filter, preventing common words from showing up.
+
+
+
+*****************************************************************************
+*
+* Step 2. Create document vectors
+*
+* project2.PrintVectors {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+PrintVectors uses the generated vocabulary as a vector space and map each document into it.
+
+Note: next steps only use only a subset of the 10000-dimension (size of vocabulary) vector space.
+
+
+*****************************************************************************
+*
+* Step 3. Find best parameters for K-means clustering algorithm
+* 
+*
+* project2.PrintClustersHillClimb {Gold standard file} {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+PrintClustersHillClimb is a double-loop iterating over a continuom of vocabulary and cluster sizes to use by K-means clustering. For each configuration, it runs K-means 15 times. Each time, the generated clusters are validated against training data, and the error rate is printed.
+
+
+K-means implementation works as follows:
+1. Create K initial cluster centroids. K / 2 are centered around a random selection of linguistic documents. The rest are centered around a random selection of non-linguistic documents.
+2. Cluster each document to a centroid
+3. Calculate new centroids
+4. Repeat steps 2-3 until centroids are stable
+
+
+*****************************************************************************
+*
+* Step 4. Print cluster centroids found by K-means clustering algorithm
+* 
+*
+* project2.PrintClusters {Gold standard file} {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+The best parameters are hard coded in the file, which outputs the cluster centroids. Each cluster is labelled Linguistic / Non-linguistic voted on the majority of it constituents.
+
+From hill climbing, a cluster size of 3 and vocabulary of 2800 yielded a 99.71% F-measure over training data. Larger cluster sizes & vocabulary sizes yielded very similar results, but smaller is better so this configuration was chosen.
+
+*****************************************************************************
+*
+* Step 5. Test results for Task 1
+* 
+*
+* project2.PrintTask1 {Vocabulary file} {Clusters file - step 3} {Gold standard file} {Path of documents}
+*
+*****************************************************************************
+
+This is the final step of Task 1. This program classifies any set of documents and compares it's classification accuracy against a gold standard.
+
+
+*** Files2 results - test data ***
+Precision	%99.39
+Recall:		%95.91
+F-measure:	%97.62
+
+*** Files1 results - training data ***
+Precision	%99.71
+Recall:		%99.71
+F-measure:	%99.71
+
+
+
+*****************************************************************************
+*
+* Notes for Task 1
+*
+*****************************************************************************
+No stop word list was used, the vocabulary selection process take care of that through the IDF weighting. 
+Stemming was tried, but it did little to improve the model, so it was not used.
+
+
+Given more time, I would have tried EM algorithms, which I believe are an improvement over K-means. It would be interesting to verify my assumption.
+
+
+
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+** 
+** TASK 2 - Search linguistic documents
+**
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+
+
+*****************************************************************************
+*
+* Option A. Search any set of files
+* 
+*
+* project2.Search {Vocabulary file} {Clusters file - from Task 1, step 3} {Path of documents}
+*
+*****************************************************************************
+
+
+
+*****************************************************************************
+*
+* Option B. Search pre-generated vectors
+* 
+*
+* project2.SearchVectors {Vocabulary file} {Clusters file - from Task 1, step 3} {Path of documents}
+*
+*****************************************************************************

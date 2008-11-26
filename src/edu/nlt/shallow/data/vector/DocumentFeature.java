@@ -22,4 +22,11 @@ public class DocumentFeature {
 		return strength;
 	}
 
+	public void addMagnitude(double value) {
+		strength += value;
+	}
+
+	public void setMagnitude(double value) {
+		strength = value;
+	}
 }

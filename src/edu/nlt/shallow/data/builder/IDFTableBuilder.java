@@ -27,6 +27,10 @@ public class IDFTableBuilder {
 		}
 	}
 
+	public int getDocumentFrequency(Word word) {
+		return documentFrequency.getCount(word);
+	}
+
 	private double getIDF(Word word) {
 
 		int count = documentFrequency.getCount(word);
@@ -42,6 +46,10 @@ public class IDFTableBuilder {
 
 	public static double getIDF(int documents, int occurances) {
 		return MathUtil.getLogBase2((double) documents / (double) occurances);
+	}
+
+	public int getNumOfDocuments() {
+		return numOfDocuments;
 	}
 
 	public IDFTable build() {

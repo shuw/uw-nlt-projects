@@ -6,6 +6,7 @@ import project2.data.Vocabulary;
 import edu.nlt.algorithm.KMeansAlgorithm;
 import edu.nlt.algorithm.KMeansAlgorithm.Cluster;
 import edu.nlt.shallow.data.vector.DocumentVector;
+import edu.nlt.util.Globals;
 
 public class KMeansRunner {
 	private static int getNumOfLinguisticMembers(GoldStandard tags,
@@ -73,7 +74,9 @@ public class KMeansRunner {
 
 		}
 
-		System.out.print(wrongClassifications + " ");
+		if (Globals.IsDebugEnabled) {
+			System.out.print(wrongClassifications + " ");
+		}
 
 		averageWrongClassifications += wrongClassifications;
 		if (wrongClassifications < minWrongClassifications) {

@@ -14,10 +14,11 @@ public class DocumentVectorProcessor implements WordProcessor {
 
 	private Vocabulary vocabulary;
 	private KeyCounterTable<Word> counter = new KeyCounterTable<Word>();
+	private String vectorName;
 
-	public DocumentVectorProcessor(Vocabulary vocabulary) {
+	public DocumentVectorProcessor(Vocabulary vocabulary, String vectorName) {
 		super();
-
+		this.vectorName = vectorName;
 		this.vocabulary = vocabulary;
 	}
 
@@ -43,7 +44,7 @@ public class DocumentVectorProcessor implements WordProcessor {
 
 		}
 
-		return new DocumentVector(vectorTable);
+		return new DocumentVector(vectorTable, vectorName);
 
 	}
 }

@@ -17,7 +17,7 @@ public class InputUtil {
 
 		Collection<File> files = FileUtil.getFiles(path, true);
 
-		// int fileProcessedCount = 0;
+		 int fileProcessedCount = 0;
 		for (File file : files) {
 
 			if (Globals.IsDebugEnabled) {
