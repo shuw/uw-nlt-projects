@@ -4,26 +4,36 @@ import java.util.Collection;
 
 import edu.nlt.algorithm.KMeansAlgorithm;
 import edu.nlt.algorithm.KMeansAlgorithm.Cluster;
+import edu.nlt.algorithm.KMeansAlgorithm.NamedVector;
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
+import edu.nlt.shallow.classifier.BinaryClassifier;
+import edu.nlt.shallow.classifier.NotClassifiedException;
 import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.Globals;
+import edu.nlt.util.MathUtil;
 
 public class KMeansRunner {
-	private static int getNumOfLinguisticMembers(GoldStandard tags,
+	private static int getNumOfLinguisticMembers(BinaryClassifier tags,
 			Collection<KMeansAlgorithm.NamedVector> vectors) {
 
 		int linguisticCount = 0;
 		for (KMeansAlgorithm.NamedVector vector : vectors) {
 
-			if (tags.isLinguistic(vector.getName())) {
-				linguisticCount++;
+			try {
+				if (tags.isPositive(vector.getName())) {
+					linguisticCount++;
+				}
+			} catch (NotClassifiedException e) {
+				e.printStackTrace(System.err);
 			}
 		}
 		return linguisticCount;
 
 	}
 
-	private static boolean isClusterLinguistic(GoldStandard tags,
+	private static boolean isClusterLinguistic(BinaryClassifier tags,
 			Collection<KMeansAlgorithm.NamedVector> vectors) {
 		if (vectors.size() == 0) {
 			throw new IllegalArgumentException();
@@ -34,15 +44,15 @@ public class KMeansRunner {
 	}
 
 	private KMeansAlgorithm bestAlgorithm;
-	private GoldStandard goldStandard;
-	private int minWrongClassifications;
-	private double averageWrongClassifications;
+	private ClassifierGoldStandard goldStandard;
+	private double maxFScore;
+	private double averageFScoreClassifications;
 
 	private Collection<DocumentVector> vectors;
 
 	private Vocabulary vocabulary;
 
-	public KMeansRunner(GoldStandard goldStandard, Vocabulary vocabulary,
+	public KMeansRunner(ClassifierGoldStandard goldStandard, Vocabulary vocabulary,
 			Collection<DocumentVector> vectors) {
 		super();
 		this.goldStandard = goldStandard;
@@ -50,7 +60,7 @@ public class KMeansRunner {
 		this.vocabulary = vocabulary;
 	}
 
-	private void runIteration(GoldStandard standard, KMeansAlgorithm clusteringAlg) {
+	private void runIteration(ClassifierGoldStandard standard, KMeansAlgorithm clusteringAlg) {
 		while (!clusteringAlg.isStopCriteriaReached()) {
 
 			clusteringAlg.runIteration();
@@ -59,28 +69,55 @@ public class KMeansRunner {
 
 		KMeansAlgorithm.Cluster[] clusters = clusteringAlg.getClusters();
 
-		int wrongClassifications = 0;
+		int truePositives = 0;
+		int relevantResults = 0;
+		int resultsRetrieved = 0;
+		int emptyClusters = 0;
 		for (KMeansAlgorithm.Cluster cluster : clusters) {
 
-			int linguisticCount = getNumOfLinguisticMembers(standard, cluster.getVectors());
+			Collection<NamedVector> vectors = cluster.getVectors();
 
-			wrongClassifications += Math.min(linguisticCount, cluster.getVectors().size()
-					- linguisticCount);
+			if (vectors.size() > 0) {
+				boolean isClusterPositive = isClusterLinguistic(standard, vectors);
 
-			// double percentLinguistic = (double) linguisticCount
-			// / (double) cluster.getVectors().size();
-			// System.out.print(Singletons.PercentageFormatter.format(percentLinguistic)
-			// + " ");
+				for (KMeansAlgorithm.NamedVector vector : vectors) {
+
+					try {
+						boolean isPositive = standard.isPositive(vector.getName());
+						if (isPositive) {
+							relevantResults++;
+						}
+
+						if (isClusterPositive) {
+							resultsRetrieved++;
+						}
+
+						if (isPositive && isClusterPositive) {
+							truePositives++;
+						}
+					} catch (NotClassifiedException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			} else {
+				emptyClusters++;
+			}
 
 		}
+		double fScore = MathUtil.getFScore(truePositives, resultsRetrieved, relevantResults);
 
 		if (Globals.IsDebugEnabled) {
-			System.out.print(wrongClassifications + " ");
+			System.out.print(Formatters.FractionFormatter.format(fScore));
+
+			if (emptyClusters > 0) {
+				System.out.print("-EmptyClusters:" + emptyClusters + " ");
+			}
+			System.out.print(" ");
 		}
 
-		averageWrongClassifications += wrongClassifications;
-		if (wrongClassifications < minWrongClassifications) {
-			minWrongClassifications = wrongClassifications;
+		averageFScoreClassifications += fScore;
+		if (fScore > maxFScore) {
+			maxFScore = fScore;
 			bestAlgorithm = clusteringAlg;
 
 		}
@@ -89,34 +126,37 @@ public class KMeansRunner {
 
 	}
 
-	public int getMinWrongClassifications() {
-		return minWrongClassifications;
+	public double getMaxFScore() {
+		return maxFScore;
 	}
 
-	public double getAverageWrongClassifications() {
-		return averageWrongClassifications;
+	public double getAverageFScore() {
+		return averageFScoreClassifications;
 	}
 
 	public void printClusters() {
 
 		Cluster[] clusters = bestAlgorithm.getClusters();
+
 		for (int i = 0; i < clusters.length; i++) {
 			KMeansAlgorithm.Cluster cluster = clusters[i];
 
-			boolean isLinguistic = isClusterLinguistic(goldStandard, cluster.getVectors());
+			if (cluster.getVectors().size() > 0) {
+				boolean isLinguistic = isClusterLinguistic(goldStandard, cluster.getVectors());
 
-			System.out.println("Cluster: "
-					+ (isLinguistic ? "L\tLinguistic cluster" : "NL\tNon-linguistic cluster"));
+				System.out.println("Cluster: "
+						+ (isLinguistic ? "L\tLinguistic cluster" : "NL\tNon-linguistic cluster"));
 
-			bestAlgorithm.printCentroid(i);
+				bestAlgorithm.printCentroid(i);
+			}
 
 		}
 
 	}
 
 	public void run(int clusters, int iterations) {
-		minWrongClassifications = Integer.MAX_VALUE;
-		averageWrongClassifications = 0;
+		maxFScore = Double.MIN_VALUE;
+		averageFScoreClassifications = 0;
 		bestAlgorithm = null;
 
 		for (int iteration = 0; iteration < iterations; iteration++) {
@@ -127,6 +167,6 @@ public class KMeansRunner {
 
 		}
 
-		averageWrongClassifications /= iterations;
+		averageFScoreClassifications /= iterations;
 	}
 }

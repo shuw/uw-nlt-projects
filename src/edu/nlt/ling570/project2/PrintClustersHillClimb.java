@@ -3,7 +3,7 @@ package edu.nlt.ling570.project2;
 import java.io.File;
 import java.util.Collection;
 
-import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
 import edu.nlt.ling570.project2.processor.KMeansRunner;
 import edu.nlt.ling570.project2.processor.VectorProcessor;
 import edu.nlt.shallow.data.Vocabulary;
@@ -27,7 +27,7 @@ public class PrintClustersHillClimb {
 	 */
 	public static void main(String[] args) {
 
-		GoldStandard goldStandard = Util.getGoldStandard(new File(args[0]));
+		ClassifierGoldStandard goldStandard = Util.getGoldStandard(new File(args[0]));
 
 		VectorProcessor processor = new VectorProcessor();
 		InputUtil.process(new File(args[2]), processor);
@@ -39,13 +39,13 @@ public class PrintClustersHillClimb {
 			Vocabulary vocabulary = Util.getVocabulary(new File(args[1]), vocabSize);
 			KMeansRunner runner = new KMeansRunner(goldStandard, vocabulary, vectors);
 
-			for (int clusters = 3; clusters <= 5; clusters++) {
+			for (int clusters = 50; clusters <= 400; clusters++) {
 				System.out.println("\nVocab size: " + vocabSize + " | Cluster size: " + clusters);
 				runner.run(clusters, 15);
 
 				System.out.println();
-				System.out.println("Min errors: " + runner.getMinWrongClassifications());
-				System.out.println("Average errors: " + Formatters.FractionFormatter.format(runner.getAverageWrongClassifications()));
+				System.out.println("Min errors: " + runner.getMaxFScore());
+				System.out.println("Average errors: " + Formatters.FractionFormatter.format(runner.getAverageFScore()));
 			}
 		}
 

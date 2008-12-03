@@ -2,8 +2,9 @@ package edu.nlt.ling570.project2;
 
 import java.io.File;
 
-import edu.nlt.ling570.project2.processor.GoldStandard;
-import edu.nlt.ling570.project2.processor.VocabFileProcessor;
+import edu.nlt.ling570.processor.VocabFileProcessor;
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
+import edu.nlt.ling570.project2.data.FileClassifierAdapter;
 import edu.nlt.util.InputUtil;
 
 public class PrintVocabulary {
@@ -18,18 +19,18 @@ public class PrintVocabulary {
 
 		// Parse gold standard
 		//
-		GoldStandard goldStandard = Util.getGoldStandard(new File(args[1]));
+		final ClassifierGoldStandard goldStandard = Util.getGoldStandard(new File(args[1]));
 
 		// Print vocabulary
 		//
 		{
 			String inputFilesPath = args[0];
 
-			VocabFileProcessor processor = new VocabFileProcessor(goldStandard);
+			VocabFileProcessor processor = new VocabFileProcessor(new FileClassifierAdapter(
+					goldStandard));
 			InputUtil.processFiles(inputFilesPath, processor);
 
 			processor.printResult(10000);
 		}
 	}
-
 }

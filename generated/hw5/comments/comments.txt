@@ -1,0 +1,20 @@
+*** Notes ***
+Up to 20 of the test email files were empty, which were all classified as negative. In comparison, only 1 of the test spam files were empty.
+
+Since these empty files negatively affected the recall rate significantly, removing them will have a tremendous positive effect.
+
+
+*** Method ***
+The same approach was taken as Project 2. However, with this dataset, a large cluster size was found to increase precision & recall rate significantly.
+
+A cluster size of 50 & vocabulary of 100 was used for this assignment.
+
+
+*** Program instructions ***
+
+hw5.sh {path to test files ex. ~/dropbox/08-09/570/hw5}
+-> prints to standard out classification results in real time
+-> prints to hw5-email.txt, sorted list of email documents + similarity cosine to nearest email (non-spam) vector
+-> prints to hw5-spam.txt, sorted list of spam documents + similarity cosine to nearest email (non-spam) vector
+-> prints to hw5-pr.txt, precision & recall numbers
+

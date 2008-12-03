@@ -3,14 +3,18 @@ package edu.nlt.ling570.project2;
 import java.io.File;
 import java.util.Collection;
 
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
+import edu.nlt.ling570.project2.data.FileClassifierAdapter;
 import edu.nlt.ling570.project2.data.LinguisticCluster;
-import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.shallow.classifier.BinaryFileClassifier;
+import edu.nlt.shallow.classifier.NotClassifiedException;
 import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.FileProcessor;
+import edu.nlt.util.Formatters;
 import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
-import edu.nlt.util.Formatters;
+import edu.nlt.util.MathUtil;
 
 public class PrintTask1 {
 	/**
@@ -33,9 +37,10 @@ public class PrintTask1 {
 		final Vocabulary vocabulary = Util.getVocabulary(new File(args[0]), -1);
 		final Collection<LinguisticCluster> clusters = Util.getClusters(new File(args[1]),
 				vocabulary);
-		final GoldStandard goldStandard = Util.getGoldStandard(new File(args[2]));
+		final ClassifierGoldStandard goldStandard = Util.getGoldStandard(new File(args[2]));
 
-		TestProcessor processor = new TestProcessor(vocabulary, clusters, goldStandard);
+		TestProcessor processor = new TestProcessor(vocabulary, clusters,
+				new FileClassifierAdapter(goldStandard));
 		InputUtil.processFiles(args[3], processor);
 		processor.printPrescisionRecall();
 	}
@@ -45,7 +50,7 @@ class TestProcessor implements FileProcessor {
 
 	private Collection<LinguisticCluster> clusters;
 
-	private GoldStandard goldStandard;
+	private BinaryFileClassifier goldStandard;
 
 	private Vocabulary vocabulary;
 
@@ -54,7 +59,7 @@ class TestProcessor implements FileProcessor {
 	private int documentsRetrieved;
 
 	public TestProcessor(Vocabulary vocabulary, Collection<LinguisticCluster> clusters,
-			GoldStandard goldStandard) {
+			BinaryFileClassifier goldStandard) {
 		super();
 
 		this.vocabulary = vocabulary;
@@ -66,35 +71,40 @@ class TestProcessor implements FileProcessor {
 	public void processFile(File file) {
 		DocumentVector document = Util.getDocumentVector(file, vocabulary);
 
-		if (Globals.IsDebugEnabled || goldStandard.isCategorized(file.getName())) {
-			boolean isLinguistic = Classify.isLinguistic(clusters, document);
+		boolean isLinguistic = Classify.isPositive(clusters, document);
 
-			System.out.println(file.getName().split("\\.")[0] + (isLinguistic ? "\tX" : ""));
+		System.out.println(ClassifierGoldStandard.canonizeName(file.getName())
+				+ (isLinguistic ? "\tX" : ""));
 
-			boolean isLinguisticGold = goldStandard.isLinguistic(file.getName());
+		boolean isLinguisticGold = false;
+		try {
+			isLinguisticGold = goldStandard.isPositive(file);
+		} catch (NotClassifiedException e) {
+			e.printStackTrace(System.err);
+		}
 
+		if (isLinguisticGold) {
+			relevantDocuments++;
+		}
+
+		if (isLinguistic) {
+			documentsRetrieved++;
 			if (isLinguisticGold) {
-				relevantDocuments++;
-			}
+				truePositives++;
 
-			if (isLinguistic) {
-				documentsRetrieved++;
-				if (isLinguisticGold) {
-					truePositives++;
-
-				}
-			}
-
-			if (Globals.IsDebugEnabled) {
-				if (isLinguistic && !isLinguisticGold) {
-					System.err.println("False positive:\t" + file.getName());
-				}
-
-				else if (!isLinguistic && isLinguisticGold) {
-					System.err.println("False negative :\t" + file.getName());
-				}
 			}
 		}
+
+		if (Globals.IsDebugEnabled) {
+			if (isLinguistic && !isLinguisticGold) {
+				System.err.println("False positive:\t" + file.getName());
+			}
+
+			else if (!isLinguistic && isLinguisticGold) {
+				System.err.println("False negative :\t" + file.getName());
+			}
+		}
+
 	}
 
 	public void printPrescisionRecall() {
@@ -105,8 +115,7 @@ class TestProcessor implements FileProcessor {
 		System.out.println("Precision\t" + Formatters.PercentageFormatter.format(precision));
 		System.out.println("Recall:\t\t" + Formatters.PercentageFormatter.format(recall));
 
-		System.out.println("F-measure:\t"
-				+ Formatters.PercentageFormatter.format((2 * recall * precision)
-						/ (recall + precision)));
+		double fScore = MathUtil.getFScore(truePositives, documentsRetrieved, relevantDocuments);
+		System.out.println("F-measure:\t" + Formatters.PercentageFormatter.format(fScore));
 	}
 }

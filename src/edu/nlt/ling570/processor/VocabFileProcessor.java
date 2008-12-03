@@ -1,4 +1,4 @@
-package edu.nlt.ling570.project2.processor;
+package edu.nlt.ling570.processor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +7,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import edu.nlt.ling570.project2.processor.BagOfWordsProcessor;
+import edu.nlt.ling570.project2.processor.PlainWordProcessor;
+import edu.nlt.ling570.project2.processor.WordCountProcessor;
+import edu.nlt.shallow.classifier.BinaryFileClassifier;
+import edu.nlt.shallow.classifier.NotClassifiedException;
 import edu.nlt.shallow.data.CountHolder;
 import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.WordMagnitude;
@@ -19,7 +24,7 @@ import edu.nlt.util.FileProcessor;
 import edu.nlt.util.InputUtil;
 
 public class VocabFileProcessor implements FileProcessor {
-	private GoldStandard goldStandard;
+	private BinaryFileClassifier goldStandard;
 	private IDFTableBuilder globalIdfTableBuilder = new IDFTableBuilder();
 	private IDFTableBuilder LidfTableBuilder = new IDFTableBuilder();
 	private IDFTableBuilder NLidfTableBuilder = new IDFTableBuilder();
@@ -27,7 +32,7 @@ public class VocabFileProcessor implements FileProcessor {
 	private WordCountProcessor lingProcessor = new WordCountProcessor();
 	private WordCountProcessor nonLingProcessor = new WordCountProcessor();
 
-	public VocabFileProcessor(GoldStandard goldStandard) {
+	public VocabFileProcessor(BinaryFileClassifier goldStandard) {
 		super();
 		this.goldStandard = goldStandard;
 	}
@@ -39,15 +44,13 @@ public class VocabFileProcessor implements FileProcessor {
 
 	@Override
 	public void processFile(File file) {
-		// remove file suffix
-		String fileName = file.getName();
+		try {
 
-		if (goldStandard.isCategorized(fileName)) {
 			BagOfWordsProcessor bagOfWordsProcessor = new BagOfWordsProcessor();
 			InputUtil.process(file, new PlainWordProcessor(bagOfWordsProcessor));
 
 			globalIdfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
-			if (goldStandard.isLinguistic(fileName)) {
+			if (goldStandard.isPositive(file)) {
 				LidfTableBuilder.addDocument(bagOfWordsProcessor.getWords());
 
 				InputUtil.process(file, new PlainWordProcessor(lingProcessor));
@@ -66,8 +69,8 @@ public class VocabFileProcessor implements FileProcessor {
 
 				for (String word : bagOfWordsProcessor.getWords()) {
 
-					Hashtable<String, DocumentFeature> TFFeatures = goldStandard
-							.isLinguistic(fileName) ? L_TFFeatures : NL_TFFeatures;
+					Hashtable<String, DocumentFeature> TFFeatures = goldStandard.isPositive(file) ? L_TFFeatures
+							: NL_TFFeatures;
 
 					DocumentFeature feature = TFFeatures.get(word);
 
@@ -83,10 +86,9 @@ public class VocabFileProcessor implements FileProcessor {
 
 			}
 
-		} else {
-			System.err.println("Uncategorized file: " + fileName);
+		} catch (NotClassifiedException e) {
+			e.printStackTrace(System.err);
 		}
-
 	}
 
 	private static final boolean UseWeightTermFrequency = true;

@@ -2,7 +2,8 @@ package edu.nlt.ling570.project2;
 
 import java.io.File;
 
-import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
+import edu.nlt.shallow.classifier.NotClassifiedException;
 import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.FileProcessor;
@@ -28,22 +29,26 @@ public class PrintVectors {
 
 		final Vocabulary vocabulary = Util.getVocabulary(new File(args[0]), -1);
 
-		final GoldStandard goldStandard = (args.length >= 3) ? Util.getGoldStandard(new File(
-				args[2])) : null;
+		final ClassifierGoldStandard goldStandard = (args.length >= 3) ? Util
+				.getGoldStandard(new File(args[2])) : null;
 
 		InputUtil.processFiles(args[1], new FileProcessor() {
 
 			@Override
 			public void processFile(File file) {
-				if (goldStandard == null || goldStandard.isLinguistic(file.getName())) {
+				try {
+					if (goldStandard == null || goldStandard.isPositive(file.getName())) {
 
-					DocumentVector documentVector = Util.getDocumentVector(file, vocabulary);
+						DocumentVector documentVector = Util.getDocumentVector(file, vocabulary);
 
-					System.out.println("file:\t" + file.getName());
-					documentVector.print();
+						System.out.println("file:\t" + file.getName());
+						documentVector.print();
 
-					System.out.println();
-					System.out.println();
+						System.out.println();
+						System.out.println();
+					}
+				} catch (NotClassifiedException e) {
+					e.printStackTrace(System.err);
 				}
 
 			}

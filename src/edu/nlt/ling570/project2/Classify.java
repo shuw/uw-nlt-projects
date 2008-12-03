@@ -40,11 +40,10 @@ public class Classify {
 			document = processor.getDocumentVector();
 		}
 
-		System.out.println(isLinguistic(clusters, document) ? "Linguistic" : "Non-linguistic");
+		System.out.println(isPositive(clusters, document) ? "Linguistic" : "Non-linguistic");
 	}
 
-	public static boolean isLinguistic(Collection<LinguisticCluster> clusters,
-			DocumentVector document) {
+	public static boolean isPositive(Collection<LinguisticCluster> clusters, DocumentVector document) {
 		double maxSimiliraty = Double.MIN_VALUE;
 		boolean isLinguistic = false;
 
@@ -53,13 +52,29 @@ public class Classify {
 			double similarity = cluster.getCosineSimilarity(document);
 			if (similarity > maxSimiliraty) {
 				maxSimiliraty = similarity;
-				isLinguistic = cluster.isLinguistic();
+				isLinguistic = cluster.isPositive();
 
 			}
 
 		}
 
 		return isLinguistic;
-
 	}
+
+	public static double getPositiveSimliarityScore(Collection<LinguisticCluster> clusters,
+			DocumentVector document) {
+		double maxSimiliraty = Double.MIN_VALUE;
+
+		for (LinguisticCluster cluster : clusters) {
+			if (cluster.isPositive()) {
+				double similarity = cluster.getCosineSimilarity(document);
+				if (similarity > maxSimiliraty) {
+					maxSimiliraty = similarity;
+				}
+			}
+		}
+
+		return maxSimiliraty;
+	}
+
 }

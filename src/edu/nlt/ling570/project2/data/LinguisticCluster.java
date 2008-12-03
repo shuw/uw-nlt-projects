@@ -1,6 +1,5 @@
 package edu.nlt.ling570.project2.data;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 
 import edu.nlt.shallow.data.Vocabulary;
@@ -38,7 +37,7 @@ public class LinguisticCluster {
 
 	}
 
-	public boolean isLinguistic() {
+	public boolean isPositive() {
 		return isLinguistic;
 	}
 

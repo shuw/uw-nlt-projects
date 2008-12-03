@@ -3,11 +3,11 @@ package edu.nlt.ling570.project2;
 import java.io.File;
 import java.util.Collection;
 
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
 import edu.nlt.ling570.project2.data.LinguisticCluster;
 import edu.nlt.ling570.project2.processor.ClustersProcessor;
 import edu.nlt.ling570.project2.processor.DocumentVectorProcessor;
 import edu.nlt.ling570.project2.processor.FileVocabularyBuilder;
-import edu.nlt.ling570.project2.processor.GoldStandard;
 import edu.nlt.ling570.project2.processor.GoldStandardProcessor;
 import edu.nlt.ling570.project2.processor.PlainWordProcessor;
 import edu.nlt.shallow.data.Vocabulary;
@@ -48,7 +48,7 @@ public class Util {
 		return builder.build();
 	}
 
-	public static GoldStandard getGoldStandard(File file) {
+	public static ClassifierGoldStandard getGoldStandard(File file) {
 		GoldStandardProcessor processor = new GoldStandardProcessor();
 
 		// Parse GoldStandardFile

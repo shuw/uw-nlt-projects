@@ -4,10 +4,11 @@ import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
 import edu.nlt.util.processor.LineProcessor;
 
 public class GoldStandardProcessor implements LineProcessor {
-	private final Pattern pattern = Pattern.compile("([0-9]+)[\\s]+(.*)[\\s]*");
+	private final Pattern pattern = Pattern.compile("([^\\s]+)[\\s]+(.*)[\\s]*");
 	private Hashtable<String, Boolean> data = new Hashtable<String, Boolean>();
 
 	@Override
@@ -28,7 +29,7 @@ public class GoldStandardProcessor implements LineProcessor {
 
 	}
 
-	public GoldStandard getGoldStandard() {
-		return new GoldStandard(data);
+	public ClassifierGoldStandard getGoldStandard() {
+		return new ClassifierGoldStandard(data);
 	}
 }

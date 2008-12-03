@@ -37,7 +37,7 @@ public class VectorProcessor implements LineProcessor {
 	}
 
 	private void pushVectorTable() {
-		if (currentVectorTable != null) {
+		if (currentVectorTable != null && currentVectorTable.size() > 0) {
 			vectors.add(new DocumentVector(currentVectorTable, currentVectorName));
 			currentVectorTable = null;
 		}

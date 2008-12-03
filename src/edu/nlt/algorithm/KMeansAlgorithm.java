@@ -1,17 +1,15 @@
 package edu.nlt.algorithm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Random;
-import java.util.Stack;
 
-
-import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.ling570.project2.data.ClassifierGoldStandard;
+import edu.nlt.shallow.classifier.NotClassifiedException;
 import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.WordMagnitude;
 import edu.nlt.shallow.data.tags.Word;
@@ -79,10 +77,10 @@ public class KMeansAlgorithm {
 
 	private static final boolean seedClusters = true;
 
-	private GoldStandard goldStandard;
+	private ClassifierGoldStandard goldStandard;
 
 	public KMeansAlgorithm(Collection<DocumentVector> vectors, Vocabulary vocabulary, int clusters,
-			GoldStandard goldStandard) {
+			ClassifierGoldStandard goldStandard) {
 		super();
 
 		this.vectorSize = vocabulary.size();
@@ -104,10 +102,14 @@ public class KMeansAlgorithm {
 
 			for (NamedVector vector : vectorsNormalized) {
 
-				if (goldStandard.isLinguistic(vector.getName())) {
-					linguisticVectors.add(vector);
-				} else {
-					nonLinguisticVectors.add(vector);
+				try {
+					if (goldStandard.isPositive(vector.getName())) {
+						linguisticVectors.add(vector);
+					} else {
+						nonLinguisticVectors.add(vector);
+					}
+				} catch (NotClassifiedException e) {
+					e.printStackTrace(System.err);
 				}
 			}
 

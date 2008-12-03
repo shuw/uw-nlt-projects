@@ -50,7 +50,7 @@ public class Search {
 
 			// Filter to linguistic documents
 			for (DocumentVector document : allDocuments) {
-				if (Classify.isLinguistic(clusters, document)) {
+				if (Classify.isPositive(clusters, document)) {
 					linguisticDocuments.add(document);
 				}
 			}
