@@ -9,6 +9,7 @@ import project2.data.Vocabulary;
 import project2.processor.SearchProcessor;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.FileProcessor;
+import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
 
 public class Search {
@@ -30,7 +31,9 @@ public class Search {
 		final Collection<LinguisticCluster> clusters = Util.getClusters(new File(args[1]),
 				vocabulary);
 
-		System.out.println("loading vector space and classifying files... please be patient");
+		if (Globals.IsDebugEnabled) {
+			System.out.println("loading vector space and classifying files... please be patient");
+		}
 		final LinkedList<DocumentVector> linguisticDocuments = new LinkedList<DocumentVector>();
 		{
 			final LinkedList<DocumentVector> allDocuments = new LinkedList<DocumentVector>();
@@ -52,7 +55,9 @@ public class Search {
 				}
 			}
 		}
-		System.out.println("Ready!");
+		if (Globals.IsDebugEnabled) {
+			System.out.println("Ready!");
+		}
 		SearchProcessor searchProcessor = new SearchProcessor(vocabulary, linguisticDocuments);
 		InputUtil.process(System.in, searchProcessor);
 	}

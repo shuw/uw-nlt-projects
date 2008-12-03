@@ -1,0 +1,54 @@
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+** 
+** TASK 2 - Search linguistic documents
+**
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+
+Script : project2-2.sh < StdIn
+         Please note the script takes a few minutes before it's ready to take inputs. It spends this time classifying the input documents
+
+Search was implemented in a straightforward way. A query is converted into a vector of words. Each word is weighted by IDF. A set of documents with lowest cosine similarity to the query is returned. The top 3 results are always returned, the cutoff is reached when the document's similarity score drops below 1/3 of the top score, 1/2 of the average. This threshold was chosen by hand. 
+
+However, the difficulty in this task lied in the difficulty of quantitatively measure my results. Given more time, I would have focused more efforts on that process which would allow me to test improvements to the model.
+
+
+*****************************************************************************
+*
+* Notes for Task 2
+*
+*****************************************************************************
+
+An attempt was made at query expansion through reverse stemming. Note that the vector space' vocabulary is not stemmed (design decision in Task 1).
+
+In this method, each query word & vocabulary are stemmed. A matching is made between the stemmed query words and stemmed vocabulary words. Once matched, the vocabulary words are expanded into their original forms. 
+This effectively expanded a query to all possible forms (from same stem) in the vocabulary.
+
+However, this method didn't seem to increase relevancy that much (probably because it expanded the weight of the de-stemmed words), so it was abandoned.
+
+
+*****************************************************************************
+*
+* Option A. Search any set of files
+* 
+*
+* project2.Search {Vocabulary file} {Clusters file - from Task 1, step 3} {Path of documents}
+*
+*****************************************************************************
+
+Search takes a few minutes to load (depending on the number of documents specified in path.
+
+In this program, each document is mapped into a vector space, and classified via the process as Task 1,
+
+
+*****************************************************************************
+*
+* Option B. Search pre-generated vectors
+* 
+*
+* project2.SearchVectors {Vocabulary file} {Clusters file - from Task 1, step 3} {Path of documents}
+*
+*****************************************************************************
+
+SearchVectors is a optimized version of SearchVectors, it reads a pre-generated document vectors (linguistic only). Otherwise, it is the same as Search.

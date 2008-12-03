@@ -1,0 +1,3 @@
+Precision	%99.39
+Recall:		%95.91
+F-measure:	%97.62

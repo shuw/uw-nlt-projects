@@ -1,0 +1,131 @@
+verbal clitic 
+90.txt	0.536150
+246.txt	0.361699
+91.txt	0.333547
+168.txt	0.227536
+92.txt	0.189590
+perfective aspect 
+264.txt	0.357343
+192.txt	0.231913
+182.txt	0.205790
+typological syntax 
+311.txt	0.131196
+31.txt	0.074914
+275.txt	0.058028
+209.txt	0.050113
+306.txt	0.047809
+durative mood 
+332.txt	0.076238
+168.txt	0.057841
+88.txt	0.057060
+108.txt	0.050158
+198.txt	0.035821
+308.txt	0.030890
+279.txt	0.028877
+264.txt	0.026130
+206.txt	0.025630
+progressive 
+88.txt	0.170738
+93.txt	0.153536
+108.txt	0.095125
+182.txt	0.085684
+205.txt	0.058659
+progressive aspect tense mood 
+182.txt	0.197851
+93.txt	0.137670
+88.txt	0.126961
+168.txt	0.102260
+108.txt	0.084608
+349.txt	0.079548
+265.txt	0.075793
+264.txt	0.066044
+morphology inflectional number person 
+195.txt	0.157343
+243.txt	0.131676
+168.txt	0.107612
+77.txt	0.102991
+157.txt	0.101655
+246.txt	0.095472
+210.txt	0.079167
+230.txt	0.074074
+281.txt	0.070244
+56.txt	0.059587
+79.txt	0.057821
+185.txt	0.056355
+239.txt	0.055398
+80.txt	0.053722
+ergative absolutive case causative 
+157.txt	0.490078
+318.txt	0.294963
+126.txt	0.255084
+243.txt	0.188456
+morphosyntax transitive verbs perfective aspect 
+264.txt	0.264733
+192.txt	0.167604
+182.txt	0.152125
+209.txt	0.094522
+232.txt	0.089994
+possessive kinship morphological semantic classes 
+194.txt	0.272264
+320.txt	0.218623
+154.txt	0.102047
+creole pidgin progressive 
+105.txt	0.539844
+241.txt	0.120766
+172.txt	0.095433
+prosody syntax semantic grammaticality 
+125.txt	0.211146
+342.txt	0.170793
+154.txt	0.089615
+224.txt	0.071186
+agreement morphology features head complement locality 
+157.txt	0.214244
+239.txt	0.098261
+349.txt	0.090112
+139.txt	0.085658
+309.txt	0.084963
+146.txt	0.084457
+195.txt	0.080749
+142.txt	0.080578
+268.txt	0.078473
+phonology optimality theory constraints 
+173.txt	0.162819
+184.txt	0.124226
+45.txt	0.115899
+219.txt	0.108790
+185.txt	0.107242
+343.txt	0.097055
+281.txt	0.093693
+203.txt	0.083862
+126.txt	0.080156
+199.txt	0.078620
+53.txt	0.065314
+antipassive voice alternation portmanteau agreement morphology oblique case 
+243.txt	0.146121
+133.txt	0.098170
+225.txt	0.075495
+283.txt	0.073571
+239.txt	0.072983
+126.txt	0.062826
+247.txt	0.060652
+285.txt	0.059236
+chomsky 
+116.txt	0.059008
+209.txt	0.053341
+223.txt	0.051128
+146.txt	0.047921
+157.txt	0.038654
+77.txt	0.038316
+147.txt	0.036894
+45.txt	0.035342
+66.txt	0.035192
+139.txt	0.032031
+268.txt	0.024393
+79.txt	0.023884
+78.txt	0.023446
+142.txt	0.023437
+173.txt	0.022561
+309.txt	0.022372
+306.txt	0.022188
+31.txt	0.021285
+307.txt	0.020943

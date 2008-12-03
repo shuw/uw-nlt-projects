@@ -8,6 +8,7 @@ import project2.data.Vocabulary;
 import project2.processor.GoldStandard;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.FileProcessor;
+import edu.nlt.util.Globals;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.Formatters;
 
@@ -65,34 +66,39 @@ class TestProcessor implements FileProcessor {
 	public void processFile(File file) {
 		DocumentVector document = Util.getDocumentVector(file, vocabulary);
 
-		boolean isLinguistic = Classify.isLinguistic(clusters, document);
+		if (Globals.IsDebugEnabled || goldStandard.isCategorized(file.getName())) {
+			boolean isLinguistic = Classify.isLinguistic(clusters, document);
 
-		System.out.println(file.getName().split("\\.")[0] + (isLinguistic ? "\tX" : ""));
+			System.out.println(file.getName().split("\\.")[0] + (isLinguistic ? "\tX" : ""));
 
-		boolean isLinguisticGold = goldStandard.isLinguistic(file.getName());
+			boolean isLinguisticGold = goldStandard.isLinguistic(file.getName());
 
-		if (isLinguisticGold) {
-			relevantDocuments++;
-		}
-
-		if (isLinguistic) {
-			documentsRetrieved++;
 			if (isLinguisticGold) {
-				truePositives++;
-
+				relevantDocuments++;
 			}
-		}
 
-		if (isLinguistic && !isLinguisticGold) {
-			System.err.println("False positive:\t" + file.getName());
-		}
+			if (isLinguistic) {
+				documentsRetrieved++;
+				if (isLinguisticGold) {
+					truePositives++;
 
-		else if (!isLinguistic && isLinguisticGold) {
-			System.err.println("False negative :\t" + file.getName());
+				}
+			}
+
+			if (Globals.IsDebugEnabled) {
+				if (isLinguistic && !isLinguisticGold) {
+					System.err.println("False positive:\t" + file.getName());
+				}
+
+				else if (!isLinguistic && isLinguisticGold) {
+					System.err.println("False negative :\t" + file.getName());
+				}
+			}
 		}
 	}
 
 	public void printPrescisionRecall() {
+		System.out.println();
 		double precision = (double) truePositives / (double) documentsRetrieved;
 		double recall = (double) truePositives / (double) relevantDocuments;
 

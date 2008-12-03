@@ -154,7 +154,7 @@ public class SearchProcessor implements LineProcessor {
 		for (DocumentResult result : results) {
 
 			// Always how top 3 results
-			if (resultCount > 3) {
+			if (resultCount > 3 || result.getScore() > 0.2d) {
 
 				double averageScore = accumulatedScore / resultCount;
 
@@ -167,6 +167,11 @@ public class SearchProcessor implements LineProcessor {
 				// Stop if the score drops below 1/5th of top result
 				if (result.getScore() < topScore / 3d) {
 					cutoffReached = true;
+				}
+
+				// Stop really low scores
+				if (result.getScore() < 0.00001) {
+					break;
 				}
 
 				if (cutoffReached) {

@@ -1,0 +1,157 @@
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+** 
+** TASK 1 - Classify lingusitic documents
+**
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+
+Script: project2-1.sh {path to documents} {path to gold standard}
+Example: bash project-1.sh ~/dropbox/08-09/570/project2/files2 ~/dropbox/08-09/570/project2/files2-gold-standard.txt
+
+The following is the submited solution. An alternate approach is documented after this section.
+
+*****************************************************************************
+*
+* Notes for Task 1
+*
+*****************************************************************************
+No stop word list was used, the vocabulary selection process naturally removed common words. Stemming was attemed, but since it did little to improve the accuracy of the model, it was not used.
+
+Given more time, I would have tried EM algorithms, which I believe are an improvement over K-means. It would be interesting to verify my assumption.
+
+*****************************************************************************
+*
+* Step 1. Vocabulary selection
+*
+* project2.PrintVocabulary {path of documents} {gold standard file}
+*
+*****************************************************************************
+
+PrintVocabulary assigns a average text frequency weight to words in the set of linguistic & non-linguistic documents. It also finds the global IDF score from all documents.
+
+For all words that occured, a weight was calculated as follows:
+
+	Weight = absolute( (AverageTextFrequency_Linguistic * LinguisticDocumentFrequencyNormalized - AverageTextFrequencyNonLinguistic * NonLinguisticDocumentFrequencyNormalized) * GlobalIDF)
+
+
+Words were sorted by this weight and the top 10000 were printed. This weighting scheme highlights words with significant differences between Linguistic / Non-linguistic categories. The multiplication factor of GlobalIDF acts as a stop-list filter, preventing common words from showing up.
+
+
+
+*****************************************************************************
+*
+* Step 2. Create document vectors
+*
+* project2.PrintVectors {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+PrintVectors uses the generated vocabulary as a vector space and map each document into it.
+
+Note: next steps only use only a subset of the 10000-dimension (size of vocabulary) vector space.
+
+
+*****************************************************************************
+*
+* Step 3. Find best parameters for K-means clustering algorithm
+* 
+*
+* project2.PrintClustersHillClimb {Gold standard file} {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+PrintClustersHillClimb is a double-loop iterating over a continuom of vocabulary and cluster sizes to use by K-means clustering. For each configuration, it runs K-means 15 times. Each time, the generated clusters are validated against training data, and the error rate is printed.
+
+
+K-means implementation works as follows:
+1. Create K initial cluster centroids. K / 2 are centered around a random selection of linguistic documents. The rest are centered around a random selection of non-linguistic documents.
+2. Cluster each document to a centroid
+3. Calculate new centroids
+4. Repeat steps 2-3 until centroids are stable
+
+
+*****************************************************************************
+*
+* Step 4. Print cluster centroids found by K-means clustering algorithm
+* 
+*
+* project2.PrintClusters {Gold standard file} {Vocabulary file} {path of documents}
+*
+*****************************************************************************
+
+The best parameters are hard coded in the file, which outputs the cluster centroids. Each cluster is labelled Linguistic / Non-linguistic voted on the majority of it constituents.
+
+From hill climbing, a cluster size of 3 and vocabulary of 2800 yielded a 99.71% F-measure over training data. Larger cluster sizes & vocabulary sizes yielded very similar results, but smaller is better so this configuration was chosen.
+
+*****************************************************************************
+*
+* Step 5. Test results for Task 1
+* 
+*
+* project2.PrintTask1 {Vocabulary file} {Clusters file - step 3} {Gold standard file} {Path of documents}
+*
+*****************************************************************************
+
+This is the final step of Task 1. This program classifies any set of documents and compares it's classification accuracy against a gold standard.
+
+Files are classified as 
+
+
+*** Files2 results - test data ***
+Precision	%99.39
+Recall:		%95.91
+F-measure:	%97.62
+
+*** Files1 results - training data ***
+Precision	%99.71
+Recall:		%99.71
+F-measure:	%99.71
+
+
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+** 
+** Task 1 - Alternate approach (not submitted)
+**
+** Experimenting with Statistical Confidence Interval Based Weighting and Term Selection Method
+**
+***********************************************************************************************************************************************************
+***********************************************************************************************************************************************************
+
+
+In one part of our work we experimented with Soucy’s and Mineau’s statistical confidence interval based term selection and term weighting method.1 Their method is using the Wilson proportion estimate to find the strength of a term in a text collection. They define xt as the number of documents containing the word t and n the size of the collection. 
+
+ p  = xt + 1.96 / n + 3.84 (iff n > 30)
+
+They calculate p’s 95 percent confidence intervals as p +/- 1.96 * sqrt[p(1-p) / n + 3.84]
+
+In the next step they calculate p for each term for both the positive and negative (in our case Ling+ vs Ling-) categories. (If there are multiple categories they calculate the p values for every category and every term for both the positive and negative categories. In our case we had only one category Ling+/-.)
+
+Then they use the label MinPos for the lower bound of the confidence interval for p in the positive category (Ling+) and MaxNeg for the upper bound of the confidence interval of p for the negative (Ling-) category. 
+
+Then they calculate the so called MinPosRelFreq as MinPosRelFreq = MinPos / MinPos + MaxNeg and the strength of the term t for the positive (Ling+) category as strength=log2(2*MinPosRelFreq) (iff MinPos > MaxNeg) OR strength=0 otherwise.
+
+Then they use the largest strength value (maxstrength) for the particular term (over all categories) and take its square. (In our case maxstrength equals with strength because we had only one category.)
+
+In a final step they calculate the weight for each term for each document using the particular terms frequency in the particular document as follows: 
+ConfWeightt,d = log(tft,d + 1)*maxtrength(t)
+
+ConfWeight is similar to TFIDF but uses the categorization problem to determine the weight of a particular term.
+
+
+Eventually, in one experimentation (not submitted) we used the ConfWeight based term selection and weights coupled with Support Vector Machine classification (WEKA libraries) to classify files1 and files2 text. We found that we had to remove stop words (http://www.dcs.gla.ac.uk/idom/ir_resources/linguistic_utils/stop_words ), had to use the Porter stemmer, removed single character “phrases” and number “phrases” before building the model in order to have the best performing data model.
+
+For files1 text the SVM classified the text with 100 percent accuracy (precision and recall were both 100 percent for both Ling+ and Ling- categories (without using crossvalidation). When 10-fold crossvalidation (10 percent random hold out ten times) was used then we had Recalls: 97.1/98.1 and Precisions: 97.9/97.3 for the Ling+/Ling- classes.
+
+When we trained the classifier on files1 and tested on files2 then the precision was 96.3/93.2 and recall was 92.4/96.7 for Ling+/Ling- categories of files2 text. About 95 percent of cases from files2 were classified correctly. 19 texts were misclassified by the SVM system based on vectors built using ConfWeight term selection and weights.
+
+We had a confusion matrix of:
+  Ling+   Ling-  <-- classified as
+ 158   	13 	   Ling+
+   6 	178 	   Ling-
+
+
+Conclusion:
+The ConfWeight term selection and weighting worked well to develop vectors for the SVM classifier and the final accuracy was high.
+
