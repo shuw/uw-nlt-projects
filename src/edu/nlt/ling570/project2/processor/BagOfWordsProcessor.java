@@ -1,4 +1,4 @@
-package project2.processor;
+package edu.nlt.ling570.project2.processor;
 
 import java.util.HashSet;
 

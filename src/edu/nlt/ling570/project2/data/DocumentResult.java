@@ -1,4 +1,4 @@
-package project2.data;
+package edu.nlt.ling570.project2.data;
 
 import edu.nlt.shallow.data.vector.DocumentVector;
 

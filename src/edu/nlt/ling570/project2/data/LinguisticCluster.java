@@ -1,8 +1,9 @@
-package project2.data;
+package edu.nlt.ling570.project2.data;
 
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.VectorUtil;

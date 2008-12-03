@@ -1,9 +1,9 @@
-package project2.processor;
+package edu.nlt.ling570.project2.processor;
 
 import java.util.Hashtable;
 
-import project2.data.Vocabulary;
 import edu.nlt.shallow.data.CountHolder;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.table.KeyCounterTable;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;

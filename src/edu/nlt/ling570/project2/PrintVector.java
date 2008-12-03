@@ -1,8 +1,8 @@
-package project2;
+package edu.nlt.ling570.project2;
 
 import java.io.File;
 
-import project2.data.Vocabulary;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 
 public class PrintVector {

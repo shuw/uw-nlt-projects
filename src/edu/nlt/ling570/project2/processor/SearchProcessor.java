@@ -1,4 +1,4 @@
-package project2.processor;
+package edu.nlt.ling570.project2.processor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
-import project2.data.DocumentResult;
-import project2.data.Vocabulary;
 import edu.nlt.external.PorterStemmer;
+import edu.nlt.ling570.project2.data.DocumentResult;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.shallow.data.vector.DocumentVector;

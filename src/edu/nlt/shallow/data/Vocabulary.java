@@ -1,8 +1,7 @@
-package project2.data;
+package edu.nlt.shallow.data;
 
 import java.util.HashSet;
 
-import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.table.IDFTable;
 import edu.nlt.shallow.data.tags.Word;
 

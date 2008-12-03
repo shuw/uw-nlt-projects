@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
 
-import project2.data.Vocabulary;
-import project2.processor.GoldStandard;
 
+import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.WordMagnitude;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;

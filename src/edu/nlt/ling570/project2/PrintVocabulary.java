@@ -1,9 +1,9 @@
-package project2;
+package edu.nlt.ling570.project2;
 
 import java.io.File;
 
-import project2.processor.GoldStandard;
-import project2.processor.VocabFileProcessor;
+import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.ling570.project2.processor.VocabFileProcessor;
 import edu.nlt.util.InputUtil;
 
 public class PrintVocabulary {

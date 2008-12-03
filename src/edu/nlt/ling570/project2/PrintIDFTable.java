@@ -1,4 +1,4 @@
-package project2;
+package edu.nlt.ling570.project2;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import project2.data.Vocabulary;
-import project2.processor.BagOfWordsProcessor;
-import project2.processor.PlainWordProcessor;
+import edu.nlt.ling570.project2.processor.BagOfWordsProcessor;
+import edu.nlt.ling570.project2.processor.PlainWordProcessor;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.WordIDF;
 import edu.nlt.shallow.data.builder.IDFTableBuilder;
 import edu.nlt.shallow.data.table.IDFTable;

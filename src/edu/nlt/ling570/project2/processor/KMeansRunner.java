@@ -1,10 +1,10 @@
-package project2.processor;
+package edu.nlt.ling570.project2.processor;
 
 import java.util.Collection;
 
-import project2.data.Vocabulary;
 import edu.nlt.algorithm.KMeansAlgorithm;
 import edu.nlt.algorithm.KMeansAlgorithm.Cluster;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.Globals;
 

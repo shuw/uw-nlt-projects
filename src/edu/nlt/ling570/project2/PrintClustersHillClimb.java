@@ -1,12 +1,12 @@
-package project2;
+package edu.nlt.ling570.project2;
 
 import java.io.File;
 import java.util.Collection;
 
-import project2.data.Vocabulary;
-import project2.processor.GoldStandard;
-import project2.processor.KMeansRunner;
-import project2.processor.VectorProcessor;
+import edu.nlt.ling570.project2.processor.GoldStandard;
+import edu.nlt.ling570.project2.processor.KMeansRunner;
+import edu.nlt.ling570.project2.processor.VectorProcessor;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
 import edu.nlt.util.Formatters;

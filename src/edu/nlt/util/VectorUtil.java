@@ -3,7 +3,7 @@ package edu.nlt.util;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import project2.data.Vocabulary;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 
 public class VectorUtil {

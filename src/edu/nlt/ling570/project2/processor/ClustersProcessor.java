@@ -1,12 +1,12 @@
-package project2.processor;
+package edu.nlt.ling570.project2.processor;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
-import project2.data.LinguisticCluster;
-import project2.data.Vocabulary;
+import edu.nlt.ling570.project2.data.LinguisticCluster;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.util.processor.LineProcessor;

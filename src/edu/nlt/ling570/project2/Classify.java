@@ -1,12 +1,12 @@
-package project2;
+package edu.nlt.ling570.project2;
 
 import java.io.File;
 import java.util.Collection;
 
-import project2.data.LinguisticCluster;
-import project2.data.Vocabulary;
-import project2.processor.DocumentVectorProcessor;
-import project2.processor.PlainWordProcessor;
+import edu.nlt.ling570.project2.data.LinguisticCluster;
+import edu.nlt.ling570.project2.processor.DocumentVectorProcessor;
+import edu.nlt.ling570.project2.processor.PlainWordProcessor;
+import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.vector.DocumentVector;
 import edu.nlt.util.InputUtil;
 
