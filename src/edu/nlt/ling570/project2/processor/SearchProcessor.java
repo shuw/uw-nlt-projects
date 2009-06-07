@@ -14,8 +14,7 @@ import edu.nlt.shallow.data.Vocabulary;
 import edu.nlt.shallow.data.tags.Word;
 import edu.nlt.shallow.data.vector.DocumentFeature;
 import edu.nlt.shallow.data.vector.DocumentVector;
-import edu.nlt.shallow.parser.ParserException;
-import edu.nlt.shallow.parser.PlainWordParser;
+import edu.nlt.shallow.parser.WordTokenizer;
 import edu.nlt.util.Formatters;
 import edu.nlt.util.Globals;
 import edu.nlt.util.VectorUtil;
@@ -36,7 +35,7 @@ public class SearchProcessor implements LineProcessor {
 
 	private Vocabulary vocabulary;
 
-	private PlainWordParser wordParser = new PlainWordParser();
+	private WordTokenizer wordParser = new WordTokenizer(false);
 
 	public SearchProcessor(Vocabulary vocabulary, Collection<DocumentVector> documents) {
 		super();
@@ -71,46 +70,41 @@ public class SearchProcessor implements LineProcessor {
 	}
 
 	private double[] getSearchVector(String value) {
-		try {
-			ArrayList<DocumentFeature> features = new ArrayList<DocumentFeature>();
 
-			for (Word word : wordParser.getWords(value)) {
+		ArrayList<DocumentFeature> features = new ArrayList<DocumentFeature>();
 
-				double idf = vocabulary.getWordIDF(word).getIDF();
+		for (Word word : wordParser.getWords(value)) {
 
-				if (useStemming) {
-					// Expand query word to all it's unstemmed versions in the
-					// vocabulary
-					String stemmedWord = stemmer.stripAffixes(word.getKey());
+			double idf = vocabulary.getWordIDF(word).getIDF();
 
-					HashSet<String> expandedWords = stemmedVocabTable.get(stemmedWord);
+			if (useStemming) {
+				// Expand query word to all it's unstemmed versions in the
+				// vocabulary
+				String stemmedWord = stemmer.stripAffixes(word.getKey());
 
-					if (expandedWords != null) {
-						for (String expandedWord : expandedWords) {
-							features.add(new DocumentFeature(new Word(expandedWord), idf));
-						}
+				HashSet<String> expandedWords = stemmedVocabTable.get(stemmedWord);
 
-					} else {
-						features.add(new DocumentFeature(word, idf));
+				if (expandedWords != null) {
+					for (String expandedWord : expandedWords) {
+						features.add(new DocumentFeature(new Word(expandedWord), idf));
 					}
 
 				} else {
 					features.add(new DocumentFeature(word, idf));
 				}
 
+			} else {
+				features.add(new DocumentFeature(word, idf));
 			}
 
-			for (DocumentFeature feature : features) {
-				System.out.print(feature.getWord() + " ");
-			}
-			System.out.println();
-
-			return VectorUtil.getNormalizedVector(features, vocabulary);
-
-		} catch (ParserException e) {
-			e.printStackTrace();
 		}
-		return null;
+
+		for (DocumentFeature feature : features) {
+			System.out.print(feature.getWord() + " ");
+		}
+		System.out.println();
+
+		return VectorUtil.getNormalizedVector(features, vocabulary);
 
 	}
 
@@ -177,8 +171,7 @@ public class SearchProcessor implements LineProcessor {
 				if (cutoffReached) {
 
 					if (Globals.IsDebugEnabled) {
-						System.out.println("Document after cutoff:"
-								+ result.getDocument().getVectorName() + "\t"
+						System.out.println("Document after cutoff:" + result.getDocument().getVectorName() + "\t"
 								+ Formatters.FractionFormatter.format(result.getScore()));
 					}
 					break;

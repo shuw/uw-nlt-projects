@@ -6,15 +6,25 @@ import java.util.Collection;
 import edu.nlt.external.PorterStemmer;
 import edu.nlt.shallow.data.tags.Word;
 
-public class PlainWordParser implements WordParser {
-	private PorterStemmer stemmer = new PorterStemmer();
+public class WordTokenizer implements WordParser {
+	private PorterStemmer stemmer;
 
-	private static final boolean useStemmer = false;
+	private boolean useStemmer = false;
 
-	private static final boolean removeNumbersAndSingleLetters = false;
+	private static boolean removeNumbersAndSingleLetters = false;
+
+	public WordTokenizer(boolean useStemmer) {
+		super();
+		this.useStemmer = useStemmer;
+
+		if (useStemmer) {
+			stemmer = new PorterStemmer();
+		}
+
+	}
 
 	@Override
-	public Collection<Word> getWords(String value) throws ParserException {
+	public Collection<Word> getWords(String value) {
 		value = value.replaceAll("[^\\w\\s]+", ""); // remove punctuation
 
 		String[] wordStrs = value.split("\\s");

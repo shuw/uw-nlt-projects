@@ -1,14 +1,13 @@
 package edu.nlt.ling570.project2.processor;
 
 import edu.nlt.shallow.data.tags.Word;
-import edu.nlt.shallow.parser.ParserException;
-import edu.nlt.shallow.parser.PlainWordParser;
+import edu.nlt.shallow.parser.WordTokenizer;
 import edu.nlt.util.processor.LineProcessor;
 import edu.nlt.util.processor.WordProcessor;
 
 public class PlainWordProcessor implements LineProcessor {
 	private WordProcessor wordProcessor;
-	private PlainWordParser parser = new PlainWordParser();
+	private WordTokenizer parser = new WordTokenizer(false);
 
 	public PlainWordProcessor(WordProcessor wordProcessor) {
 		super();
@@ -18,12 +17,8 @@ public class PlainWordProcessor implements LineProcessor {
 	@Override
 	public void processLine(String value) {
 
-		try {
-			for (Word word : parser.getWords(value)) {
-				wordProcessor.processWord(word);
-			}
-		} catch (ParserException e) {
-			e.printStackTrace(System.err);
+		for (Word word : parser.getWords(value)) {
+			wordProcessor.processWord(word);
 		}
 
 	}
